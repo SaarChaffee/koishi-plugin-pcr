@@ -1,0 +1,52 @@
+{
+  "name": "koishi-plugin-pcr",
+  "description": "PCR plugin for Koishi",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "author": "SaarChaffee <saarchaffee@qq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaarChaffee/koishi-plugin-pcr.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/SaarChaffee/koishi-plugin-pcr/issues"
+  },
+  "homepage": "https://github.com/SaarChaffee/koishi-plugin-pcr",
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "service",
+    "plugin",
+    "pcr",
+    "公主连结",
+    "公主连结Re:Dive",
+    "公主連結R",
+    "超異域公主連結☆Re:Dive",
+    "プリコネR",
+    "プリンセスコネクト！Re:Dive"
+  ],
+  "koishi": {
+    "description": {
+      "zh": "PCR 插件核心"
+    },
+    "service": {
+      "implements": [
+        "pcr"
+      ],
+      "optional": []
+    }
+  },
+  "peerDependencies": {
+    "koishi": "^4.16.4"
+  },
+  "dependencies": {
+    "file-type": "^16.5.4"
+  }
+}
