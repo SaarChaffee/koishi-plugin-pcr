@@ -42,7 +42,7 @@ export class PCR extends Service {
     return this.root
   }
 
-  async geiImage(url: string, fullPath: string): Promise<ImageInfo> {
+  async getImage(url: string, fullPath: string): Promise<ImageInfo> {
     let buffer: Buffer
     if (existsSync(fullPath)) {
       buffer = await readFile(fullPath)
@@ -62,19 +62,19 @@ export class PCR extends Service {
   async getCardProfile(id: string, star: number = 1): Promise<ImageInfo> {
     const name = `${id}${star}1.webp`
     const path = join(this.root, this.CARD_PROFILE)
-    return this.geiImage(this.RESOURCE_URL + this.CARD_PROFILE + sanitize(name), join(path, name))
+    return this.getImage(this.RESOURCE_URL + this.CARD_PROFILE + sanitize(name), join(path, name))
   }
 
   async getUnitIcon(id: string, star: number = 1): Promise<ImageInfo> {
     const name = `${id}${star}1.webp`
     const path = join(this.root, this.ICON_UNIT)
-    return this.geiImage(this.RESOURCE_URL + this.ICON_UNIT + sanitize(name), join(path, name))
+    return this.getImage(this.RESOURCE_URL + this.ICON_UNIT + sanitize(name), join(path, name))
   }
 
   async getCardFull(id: string, star: number = 1): Promise<ImageInfo> {
     const name = `${id}${star}1.webp`
     const path = join(this.root, this.CARD_FULL)
-    return this.geiImage(this.RESOURCE_URL + this.CARD_FULL + sanitize(name), join(path, name))
+    return this.getImage(this.RESOURCE_URL + this.CARD_FULL + sanitize(name), join(path, name))
   }
 
   async initCharaName(res?: Result) {
