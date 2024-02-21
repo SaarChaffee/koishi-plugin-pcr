@@ -6,7 +6,7 @@ import { fromBuffer } from 'file-type'
 import { Context, Service, sanitize } from 'koishi'
 
 import { Trie } from './trie'
-import { Chara, ImageInfo, PCRConfig, Result } from './types'
+import { Chara, CharacterProfile, CharacterProfiles, ImageInfo, PCRConfig, Result } from './types'
 
 export class PCR extends Service {
   private CHARA_URL = 'https://mirror.ghproxy.com/https://raw.githubusercontent.com/Ice9Coffee/LandosolRoster/master'
@@ -19,7 +19,7 @@ export class PCR extends Service {
   private CARD_FULL = '/card/full'
 
   private charaName: Chara = {}
-  private charaProfile: Chara = {}
+  private charaProfile: CharacterProfiles = {}
   private unavailableChara: number[] = []
   private root: string
   private config: PCRConfig
@@ -33,9 +33,9 @@ export class PCR extends Service {
   }
 
   protected async start() {
-    await this.initCharaName(require('../data/chara_name.json'))
-    // await this.initCharaProfile()
-    // await this.initUnavailableChara()
+    await this.initCharaName()
+    await this.initCharaProfile()
+    await this.initUnavailableChara()
   }
 
   getRoot() {
@@ -91,7 +91,7 @@ export class PCR extends Service {
       })
   }
 
-  async initCharaProfile(res?: Chara) {
+  async initCharaProfile(res?: CharacterProfiles) {
     res ||= await this.ctx.http.get(this.CHARA_URL + this.CHARA_PROFILE)
     this.charaProfile = res
   }
@@ -99,6 +99,14 @@ export class PCR extends Service {
   async initUnavailableChara(res?: number[]) {
     res ||= await this.ctx.http.get(this.CHARA_URL + this.UNAVAILABLE_CHARA)
     this.unavailableChara = res
+  }
+
+  getCharaProfile(id: string): CharacterProfile {
+    return this.charaProfile[id]
+  }
+
+  isUnavailableChara(id: number): boolean {
+    return this.unavailableChara.includes(id)
   }
 
   parseTeam(str: string, toID?: boolean): string[] | [boolean, string] {
