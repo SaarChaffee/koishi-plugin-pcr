@@ -1,0 +1,63 @@
+{
+  "name": "koishi-plugin-pcr-arena",
+  "description": "PCR jjc/pjjc plugin",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "author": "SaarChaffee <saarchaffee@qq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaarChaffee/koishi-plugin-pcr.git",
+    "directory": "packages/arena"
+  },
+  "bugs": {
+    "url": "https://github.com/SaarChaffee/koishi-plugin-pcr/issues"
+  },
+  "homepage": "https://github.com/SaarChaffee/koishi-plugin-pcr",
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "service",
+    "plugin",
+    "pcr",
+    "公主连结",
+    "公主连结Re:Dive",
+    "公主連結R",
+    "超異域公主連結☆Re:Dive",
+    "プリコネR",
+    "プリンセスコネクト！Re:Dive",
+    "arena",
+    "jjc",
+    "pjjc",
+    "竞技场",
+    "公主竞技场",
+    "戰鬥競技場",
+    "公主競技場",
+    "アリーナ",
+    "プリンセスアリーナ"
+  ],
+  "koishi": {
+    "description": {
+      "zh": "PCR jjc 插件"
+    },
+    "service": {
+      "implements": [],
+      "required": [
+        "pcr",
+        "canvas"
+      ],
+      "optional": []
+    }
+  },
+  "peerDependencies": {
+    "koishi": "^4.16.4"
+  },
+  "devDependencies": {
+    "koishi-plugin-canvas": "^0.2.2"
+  }
+}
