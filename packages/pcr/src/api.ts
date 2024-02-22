@@ -47,7 +47,7 @@ export class PCR extends Service {
   async getImage(url: string, fullPath: string, canvas?: boolean): Promise<ImageInfo> {
     let buffer: Buffer | Image
     if (existsSync(fullPath)) {
-      buffer = canvas ? await this.ctx.canvas.loadImage(fullPath) : await readFile(fullPath)
+      buffer = await readFile(fullPath)
     } else {
       const path = dirname(fullPath)
       if (!existsSync(path)) {
@@ -56,9 +56,9 @@ export class PCR extends Service {
       const file = await this.ctx.http.file(url)
       buffer = Buffer.from(file.data)
       await writeFile(fullPath, buffer)
-      buffer = canvas ? await this.ctx.canvas.loadImage(buffer) : buffer
     }
-    const type = (await fromBuffer(buffer as Buffer)).ext
+    const type = (await fromBuffer(buffer)).ext
+    buffer = canvas ? await this.ctx.canvas.loadImage(buffer) : buffer
     return { buffer, type }
   }
 

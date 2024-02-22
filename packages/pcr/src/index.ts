@@ -5,6 +5,8 @@ import { PCRConfig } from './types'
 
 export const name = 'pcr'
 
+export const inject = ['canvas']
+
 declare module 'koishi' {
   interface Context {
     pcr: PCR
