@@ -60,18 +60,21 @@ export class PCR extends Service {
   }
 
   async getCardProfile(id: string, star: number = 1): Promise<ImageInfo> {
+    star = star >= 1 && star < 3 ? 1 : star >= 3 && star < 6 ? 3 : 6
     const name = `${id}${star}1.webp`
     const path = join(this.root, this.CARD_PROFILE)
     return this.getImage(this.RESOURCE_URL + this.CARD_PROFILE + sanitize(name), join(path, name))
   }
 
   async getUnitIcon(id: string, star: number = 1): Promise<ImageInfo> {
+    star = star >= 1 && star < 3 ? 1 : star >= 3 && star < 6 ? 3 : 6
     const name = `${id}${star}1.webp`
     const path = join(this.root, this.ICON_UNIT)
     return this.getImage(this.RESOURCE_URL + this.ICON_UNIT + sanitize(name), join(path, name))
   }
 
   async getCardFull(id: string, star: number = 1): Promise<ImageInfo> {
+    star = star >= 1 && star < 3 ? 1 : star >= 3 && star < 6 ? 3 : 6
     const name = `${id}${star}1.webp`
     const path = join(this.root, this.CARD_FULL)
     return this.getImage(this.RESOURCE_URL + this.CARD_FULL + sanitize(name), join(path, name))
