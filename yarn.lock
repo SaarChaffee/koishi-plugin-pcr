@@ -5234,6 +5234,7 @@ __metadata:
   resolution: "koishi-plugin-pcr@workspace:packages/pcr"
   dependencies:
     file-type: "npm:^16.5.4"
+    koishi-plugin-canvas: "npm:^0.2.2"
   peerDependencies:
     koishi: ^4.16.4
   languageName: unknown

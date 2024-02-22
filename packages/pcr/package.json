@@ -37,6 +37,9 @@
       "zh": "PCR 插件核心"
     },
     "service": {
+      "required": [
+        "canvas"
+      ],
       "implements": [
         "pcr"
       ],
@@ -45,6 +48,9 @@
   },
   "peerDependencies": {
     "koishi": "^4.16.4"
+  },
+  "devDependencies": {
+    "koishi-plugin-canvas": "^0.2.2"
   },
   "dependencies": {
     "file-type": "^16.5.4"
