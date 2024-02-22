@@ -46,8 +46,8 @@ export class PCR extends Service {
 
   async getImage(url: string, fullPath: string, canvas?: boolean): Promise<ImageInfo> {
     let buffer: Buffer | Image
-    this.logger.info(`getImage: ${url}`)
-    this.logger.info(`fullPath: ${fullPath}`)
+    this.logger.debug(`getImage: ${url}`)
+    this.logger.debug(`fullPath: ${fullPath}`)
     if (existsSync(fullPath)) {
       buffer = await readFile(fullPath)
     } else {
