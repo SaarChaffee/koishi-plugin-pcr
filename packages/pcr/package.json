@@ -6,7 +6,8 @@
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
-    "dist"
+    "dist",
+    "data/*.json"
   ],
   "author": "SaarChaffee <saarchaffee@qq.com>",
   "license": "MIT",

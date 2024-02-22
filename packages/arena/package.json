@@ -6,7 +6,8 @@
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
-    "dist"
+    "dist",
+    "public"
   ],
   "author": "SaarChaffee <saarchaffee@qq.com>",
   "license": "MIT",
