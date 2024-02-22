@@ -2,6 +2,8 @@ import { existsSync } from 'fs'
 import { mkdir, readFile, writeFile } from 'fs/promises'
 import { dirname, join } from 'path'
 
+import type { } from 'koishi-plugin-canvas'
+import { Image } from '@koishijs/canvas'
 import { fromBuffer } from 'file-type'
 import { Context, Service, sanitize } from 'koishi'
 
@@ -42,10 +44,10 @@ export class PCR extends Service {
     return this.root
   }
 
-  async getImage(url: string, fullPath: string): Promise<ImageInfo> {
-    let buffer: Buffer
+  async getImage(url: string, fullPath: string, canvas?: boolean): Promise<ImageInfo> {
+    let buffer: Buffer | Image
     if (existsSync(fullPath)) {
-      buffer = await readFile(fullPath)
+      buffer = canvas ? await this.ctx.canvas.loadImage(fullPath) : await readFile(fullPath)
     } else {
       const path = dirname(fullPath)
       if (!existsSync(path)) {
@@ -54,30 +56,31 @@ export class PCR extends Service {
       const file = await this.ctx.http.file(url)
       buffer = Buffer.from(file.data)
       await writeFile(fullPath, buffer)
+      buffer = canvas ? await this.ctx.canvas.loadImage(buffer) : buffer
     }
-    const type = (await fromBuffer(buffer)).ext
+    const type = (await fromBuffer(buffer as Buffer)).ext
     return { buffer, type }
   }
 
-  async getCardProfile(id: string, star: number = 1): Promise<ImageInfo> {
+  async getCardProfile(id: string, star: number = 1, canvas?: boolean): Promise<ImageInfo> {
     star = star >= 1 && star < 3 ? 1 : star >= 3 && star < 6 ? 3 : 6
     const name = `${id}${star}1.webp`
     const path = join(this.root, this.CARD_PROFILE)
-    return this.getImage(this.RESOURCE_URL + this.CARD_PROFILE + sanitize(name), join(path, name))
+    return this.getImage(this.RESOURCE_URL + this.CARD_PROFILE + sanitize(name), join(path, name), canvas)
   }
 
-  async getUnitIcon(id: string, star: number = 1): Promise<ImageInfo> {
+  async getUnitIcon(id: string, star: number = 1, canvas?: boolean): Promise<ImageInfo> {
     star = star >= 1 && star < 3 ? 1 : star >= 3 && star < 6 ? 3 : 6
     const name = `${id}${star}1.webp`
     const path = join(this.root, this.ICON_UNIT)
-    return this.getImage(this.RESOURCE_URL + this.ICON_UNIT + sanitize(name), join(path, name))
+    return this.getImage(this.RESOURCE_URL + this.ICON_UNIT + sanitize(name), join(path, name), canvas)
   }
 
-  async getCardFull(id: string, star: number = 1): Promise<ImageInfo> {
+  async getCardFull(id: string, star: number = 1, canvas?: boolean): Promise<ImageInfo> {
     star = star >= 1 && star < 3 ? 1 : star >= 3 && star < 6 ? 3 : 6
     const name = `${id}${star}1.webp`
     const path = join(this.root, this.CARD_FULL)
-    return this.getImage(this.RESOURCE_URL + this.CARD_FULL + sanitize(name), join(path, name))
+    return this.getImage(this.RESOURCE_URL + this.CARD_FULL + sanitize(name), join(path, name), canvas)
   }
 
   async initCharaName(res?: Result) {

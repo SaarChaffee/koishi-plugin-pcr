@@ -1,3 +1,5 @@
+import { Image } from '@koishijs/canvas'
+
 export interface Result {
   [key: string]: string[]
 }
@@ -64,6 +66,6 @@ export interface PCRConfig {
 }
 
 export interface ImageInfo {
-  buffer: Buffer
+  buffer: Buffer | Image
   type: string
 }
