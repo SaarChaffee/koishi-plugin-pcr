@@ -43,6 +43,7 @@ export class Trie {
   }
 
   longestPrefix(word: string): [boolean, string] {
+    logger.debug(word)
     let node = this.root
     let prefix = ''
     for (let i = 0; i < word.length; i++) {

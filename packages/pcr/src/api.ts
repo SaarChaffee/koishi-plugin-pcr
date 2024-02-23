@@ -59,6 +59,8 @@ export class PCR extends Service {
         await mkdir(path, { recursive: true })
       }
       const file = await this.ctx.http.file(url)
+      this.logger.debug(file.filename)
+      this.logger.info(`正在下载资源: ${fullPath}`)
       buffer = Buffer.from(file.data)
       await writeFile(fullPath, buffer)
     }
@@ -124,10 +126,13 @@ export class PCR extends Service {
 
   parseTeam(str: string, toID?: boolean): string[] | [boolean, string] {
     const team = []
-    while (str.length) {
+    while (true) {
+      if (!str.length) {
+        break
+      }
       const [res, prefix] = this.trie.longestPrefix(str)
       if (res && prefix.length) {
-        str = str.slice(prefix.length)
+        str = str.slice(prefix.length).trim()
         team.push(toID ? this.charaName[prefix] : prefix)
       } else {
         this.logger.error(`Parser: 无法解析「${prefix}」`)
