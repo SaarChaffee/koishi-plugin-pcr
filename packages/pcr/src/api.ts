@@ -11,7 +11,7 @@ import { Trie } from './trie'
 import { Chara, CharacterProfile, CharacterProfiles, ImageInfo, PCRConfig, Result } from './types'
 
 export class PCR extends Service {
-  private CHARA_URL = 'https://mirror.ghproxy.com/https://raw.githubusercontent.com/Ice9Coffee/LandosolRoster/master'
+  private CHARA_URL: string
   private CHARA_NAME = '/chara_name.json'
   private CHARA_PROFILE = '/chara_profile.json'
   private UNAVAILABLE_CHARA = '/unavailable_chara.json'
@@ -30,6 +30,9 @@ export class PCR extends Service {
   constructor(ctx: Context, config: PCRConfig) {
     super(ctx, 'pcr')
     this.config = config
+    this.CHARA_URL = typeof this.config.LandosolRoster === 'string'
+      ? this.config.LandosolRoster
+      : this.config.LandosolRoster.endpoint
     this.trie = new Trie()
     this.root = join(this.ctx.baseDir, this.config.root)
   }
@@ -87,6 +90,7 @@ export class PCR extends Service {
 
   async initCharaName(res?: Result) {
     res ||= await this.ctx.http.get(this.CHARA_URL + this.CHARA_NAME)
+    this.logger.debug(res)
     Object.entries(res)
       .forEach(([key, values]) => {
         values.forEach((value) => {

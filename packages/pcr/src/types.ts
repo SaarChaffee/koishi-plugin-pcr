@@ -63,6 +63,7 @@ export interface CharacterProfiles {
 
 export interface PCRConfig {
   root: string
+  LandosolRoster: { endpoint: string } | string
 }
 
 export interface ImageInfo {
