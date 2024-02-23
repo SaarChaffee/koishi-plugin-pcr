@@ -91,16 +91,15 @@ export class PCR extends Service {
   async initCharaName(res?: Result) {
     res ||= await this.ctx.http.get(this.CHARA_URL + this.CHARA_NAME)
     this.logger.debug(res)
-    Object.entries(res)
-      .forEach(([key, values]) => {
-        values.forEach((value) => {
-          if (Object.entries(this.charaName).find(([k]) => k === value)) {
-            this.logger.warn(`init chara: 出现重名「${value}」于id: ${this.charaName[value]} 与id: ${key}`)
-          }
-          this.charaName[value] = key
-          this.trie.insert(value)
-        })
-      })
+    for (const [key, values] of Object.entries(res)) {
+      for (const value of values) {
+        if (value in this.charaName) {
+          this.logger.warn(`init chara: 出现重名「${value}」于id: ${this.charaName[value]} 与id: ${key}`)
+        }
+        this.charaName[value] = key
+        this.trie.insert(value)
+      }
+    }
   }
 
   async initCharaProfile(res?: CharacterProfiles) {
