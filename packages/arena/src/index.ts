@@ -169,7 +169,7 @@ export function apply(ctx: Context, config: ArenaConfig) {
       logger.debug(region)
       logger.debug(defId.map(t => t + '01').map(Number))
 
-      session.send('正在查询，请稍等...')
+      await session.send('正在查询，请稍等...')
       const res = await ctx.arena.request(defId.map(t => t + '01').map(Number), region)
       logger.debug(res)
       if (res.code) {
@@ -198,7 +198,7 @@ export function apply(ctx: Context, config: ArenaConfig) {
       const width = 5 * iconSize + 100
       const height = n * (iconSize + borderPix) - borderPix
 
-      session.send('已查询到解法，正在渲染至图片，首次下载角色资源会耗时较久...')
+      await session.send('已查询到解法，正在渲染至图片，首次下载角色资源会耗时较久...')
       return await session.app.canvas.render(width, height, async (cv) => {
         cv.fillStyle = '#fff'
         cv.fillRect(0, 0, width, height)
