@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-pcr",
   "description": "PCR plugin for Koishi",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -47,7 +47,7 @@
     }
   },
   "peerDependencies": {
-    "koishi": "^4.16.4"
+    "koishi": "^4.17.0"
   },
   "devDependencies": {
     "koishi-plugin-canvas": "^0.2.2"
