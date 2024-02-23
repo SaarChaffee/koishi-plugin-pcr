@@ -90,6 +90,7 @@ export class PCR extends Service {
 
   async initCharaName(res?: Result) {
     res ||= await this.ctx.http.get(this.CHARA_URL + this.CHARA_NAME)
+    res = JSON.parse(JSON.stringify(res).replace(/\r\n/g, '\n'))
     this.logger.debug(res)
     for (const [key, values] of Object.entries(res)) {
       for (const value of values) {
