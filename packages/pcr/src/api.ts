@@ -89,8 +89,7 @@ export class PCR extends Service {
   }
 
   async initCharaName(res?: Result) {
-    res ||= await this.ctx.http.get(this.CHARA_URL + this.CHARA_NAME)
-    res = JSON.parse(JSON.stringify(res).replace(/\r\n/g, '\n'))
+    res ||= await this.ctx.http.get(this.CHARA_URL + this.CHARA_NAME, { responseType: 'json' })
     this.logger.debug(res)
     for (const [key, values] of Object.entries(res)) {
       for (const value of values) {
@@ -104,12 +103,14 @@ export class PCR extends Service {
   }
 
   async initCharaProfile(res?: CharacterProfiles) {
-    res ||= await this.ctx.http.get(this.CHARA_URL + this.CHARA_PROFILE)
+    res ||= await this.ctx.http.get(this.CHARA_URL + this.CHARA_PROFILE, { responseType: 'json' })
+    this.logger.debug(res)
     this.charaProfile = res
   }
 
   async initUnavailableChara(res?: number[]) {
-    res ||= await this.ctx.http.get(this.CHARA_URL + this.UNAVAILABLE_CHARA)
+    res ||= await this.ctx.http.get(this.CHARA_URL + this.UNAVAILABLE_CHARA, { responseType: 'json' })
+    this.logger.debug(res)
     this.unavailableChara = res
   }
 
