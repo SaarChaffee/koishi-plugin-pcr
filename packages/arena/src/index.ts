@@ -129,11 +129,13 @@ export function apply(ctx: Context, config: ArenaConfig) {
       let msg: string = elemnts[0].attrs.content.trim()
       if (typeof prefix === 'string') {
         if (msg.startsWith(prefix)) {
-          msg = msg.substring(1, msg.length)
+          msg = msg.substring(prefix.length, msg.length)
         }
       } else if (Array.isArray(prefix)) {
-        if (prefix.some(item => msg.startsWith(item))) {
-          msg = msg.substring(1, msg.length)
+        for (const pre of prefix) {
+          if (msg.startsWith(pre)) {
+            msg = msg.substring(pre.length, msg.length)
+          }
         }
       }
 
@@ -192,7 +194,7 @@ export function apply(ctx: Context, config: ArenaConfig) {
 
       const iconSize = 128
       const smallIconSize = 20
-      const n = result.length > 10 ? 10 : result.length
+      const n = result.length >= 6 ? 6 : result.length
       const borderPix = 5
       const width = 5 * iconSize + 100
       const height = n * (iconSize + borderPix) - borderPix
