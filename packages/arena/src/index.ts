@@ -171,8 +171,7 @@ export function apply(ctx: Context, config: ArenaConfig) {
       ctx.logger.debug(defId.map(t => t + '01').map(Number))
 
       await session.send('正在查询，请稍等...')
-      // const res = await ctx.arena.request(defId.map(t => t + '01').map(Number), region)
-      const res = require('../temp/whqlcdyl.json')
+      const res = await ctx.arena.request(defId.map(t => t + '01').map(Number), region)
       ctx.logger.debug(res)
       if (res.code) {
         switch (res.code) {
