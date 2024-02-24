@@ -24,8 +24,9 @@ export class PCR extends Service {
   private charaProfile: CharacterProfiles = {}
   private unavailableChara: number[] = []
   private root: string
-  private config: PCRConfig
   private trie: Trie
+
+  declare config: PCRConfig
 
   constructor(ctx: Context, config: PCRConfig) {
     super(ctx, 'pcr')
@@ -49,8 +50,8 @@ export class PCR extends Service {
 
   async getImage(url: string, fullPath: string, canvas?: boolean): Promise<ImageInfo> {
     let buffer: Buffer | Image
-    this.logger.debug(`getImage: ${url}`)
-    this.logger.debug(`fullPath: ${fullPath}`)
+    this.ctx.logger.debug(`getImage: ${url}`)
+    this.ctx.logger.debug(`fullPath: ${fullPath}`)
     if (existsSync(fullPath)) {
       buffer = await readFile(fullPath)
     } else {
@@ -59,8 +60,8 @@ export class PCR extends Service {
         await mkdir(path, { recursive: true })
       }
       const file = await this.ctx.http.file(url)
-      this.logger.debug(file.filename)
-      this.logger.info(`正在下载资源: ${fullPath}`)
+      this.ctx.logger.debug(file.filename)
+      this.ctx.logger.info(`正在下载资源: ${fullPath}`)
       buffer = Buffer.from(file.data)
       await writeFile(fullPath, buffer)
     }
@@ -92,11 +93,11 @@ export class PCR extends Service {
 
   async initCharaName(res?: Result) {
     res ||= await this.ctx.http.get(this.CHARA_URL + this.CHARA_NAME, { responseType: 'json' })
-    this.logger.debug(res)
+    this.ctx.logger.debug(res)
     for (const [key, values] of Object.entries(res)) {
       for (const value of values) {
         if (value in this.charaName) {
-          this.logger.warn(`init chara: 出现重名「${value}」于id: ${this.charaName[value]} 与id: ${key}`)
+          this.ctx.logger.warn(`init chara: 出现重名「${value}」于id: ${this.charaName[value]} 与id: ${key}`)
         }
         this.charaName[value] = key
         this.trie.insert(value)
@@ -106,13 +107,13 @@ export class PCR extends Service {
 
   async initCharaProfile(res?: CharacterProfiles) {
     res ||= await this.ctx.http.get(this.CHARA_URL + this.CHARA_PROFILE, { responseType: 'json' })
-    this.logger.debug(res)
+    this.ctx.logger.debug(res)
     this.charaProfile = res
   }
 
   async initUnavailableChara(res?: number[]) {
     res ||= await this.ctx.http.get(this.CHARA_URL + this.UNAVAILABLE_CHARA, { responseType: 'json' })
-    this.logger.debug(res)
+    this.ctx.logger.debug(res)
     this.unavailableChara = res
   }
 
@@ -135,7 +136,7 @@ export class PCR extends Service {
         str = str.slice(prefix.length).trim()
         team.push(toID ? this.charaName[prefix] : prefix)
       } else {
-        this.logger.error(`Parser: 无法解析「${prefix}」`)
+        this.ctx.logger.error(`Parser: 无法解析「${prefix}」`)
         return [res, prefix]
       }
     }

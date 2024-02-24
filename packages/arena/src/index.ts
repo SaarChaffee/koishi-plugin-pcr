@@ -3,14 +3,12 @@ import { readFile } from 'fs/promises'
 import path from 'path'
 
 import { Image } from '@koishijs/canvas'
-import { Context, Logger, Schema, Service } from 'koishi'
+import { Context, Schema, Service } from 'koishi'
 
 import { ArenaConfig, PcrdfansResponse } from './types'
 
 import type { } from 'koishi-plugin-pcr'
 import type { } from 'koishi-plugin-canvas'
-
-const logger = new Logger('arena')
 
 export const name = 'arena'
 
@@ -27,7 +25,6 @@ export const Config: Schema<ArenaConfig> = Schema.object({
 })
 
 export class Arena extends Service {
-  private config: ArenaConfig
   private alias = ['怎么拆', '怎么解', '怎么打', '如何拆', '如何解', '如何打', 'jjc查询', 'jjc']
   private alias_bcr: string[] = []
   private alias_tw: string[] = []
@@ -39,6 +36,8 @@ export class Arena extends Service {
   public STAR_DISABLE: Image
   public THUMB_DOWN: Image
   public THUMB_UP: Image
+
+  declare config: ArenaConfig
 
   constructor(ctx: Context, config: ArenaConfig) {
     super(ctx, 'arena', true)
@@ -70,7 +69,7 @@ export class Arena extends Service {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       'Authorization': this.config.API_KEY,
     }
-    this.logger.debug(headers)
+    this.ctx.logger.debug(headers)
     const data = {
       _sign: 'a',
       def: defenders,
@@ -80,12 +79,12 @@ export class Arena extends Service {
       ts: Math.floor(Date.now() / 1000),
       region,
     }
-    this.logger.debug(data)
+    this.ctx.logger.debug(data)
     const res = await this.ctx.http.post<PcrdfansResponse>(api, data, { headers, timeout: 10000 }).catch((e) => {
-      this.logger.error(e)
+      this.ctx.logger.error(e)
       return e
     })
-    this.logger.debug(res)
+    this.ctx.logger.debug(res)
     return res
   }
 
@@ -118,7 +117,7 @@ export function apply(ctx: Context, config: ArenaConfig) {
       const elemnts = session.elements
       const selfId = session.bot.selfId
       const prefix: string | Object = session.app.config.prefix.valueOf()
-      logger.debug(elemnts)
+      ctx.logger.debug(elemnts)
 
       if (elemnts[0].type === 'at' && elemnts[0].attrs?.id === selfId) {
         elemnts.shift()
@@ -165,13 +164,13 @@ export function apply(ctx: Context, config: ArenaConfig) {
       }
 
       const region = ctx.arena.region(command)
-      logger.debug(command)
-      logger.debug(region)
-      logger.debug(defId.map(t => t + '01').map(Number))
+      ctx.logger.debug(command)
+      ctx.logger.debug(region)
+      ctx.logger.debug(defId.map(t => t + '01').map(Number))
 
       await session.send('正在查询，请稍等...')
       const res = await ctx.arena.request(defId.map(t => t + '01').map(Number), region)
-      logger.debug(res)
+      ctx.logger.debug(res)
       if (res.code) {
         switch (res.code) {
           case 103:
@@ -186,7 +185,7 @@ export function apply(ctx: Context, config: ArenaConfig) {
       }
 
       const result = res.data.result
-      logger.debug(result)
+      ctx.logger.debug(result)
       if (result.length === 0) {
         return `没有查询到解法\n作业上传请前往 pcrdfans`
       }
@@ -210,11 +209,11 @@ export function apply(ctx: Context, config: ArenaConfig) {
 
         for (let i = 0; i < n; i++) {
           for (let j = 0; j < 5; j++) {
-            logger.debug(`i: ${i}, j: ${j}`)
+            ctx.logger.debug(`i: ${i}, j: ${j}`)
             const atk = result[i].atk[j]
             const star = result[i].atk[j].star === 0 ? 3 : result[i].atk[j].star
-            logger.debug(`atk star: ${atk.star}`)
-            logger.debug(`star: ${star}`)
+            ctx.logger.debug(`atk star: ${atk.star}`)
+            ctx.logger.debug(`star: ${star}`)
 
             const x = iconSize * j
             const y = (iconSize + borderPix) * i
