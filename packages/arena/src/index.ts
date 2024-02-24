@@ -171,7 +171,8 @@ export function apply(ctx: Context, config: ArenaConfig) {
       ctx.logger.debug(defId.map(t => t + '01').map(Number))
 
       await session.send('正在查询，请稍等...')
-      const res = await ctx.arena.request(defId.map(t => t + '01').map(Number), region)
+      // const res = await ctx.arena.request(defId.map(t => t + '01').map(Number), region)
+      const res = require('../temp/whqlcdyl.json')
       ctx.logger.debug(res)
       if (res.code) {
         switch (res.code) {
@@ -197,16 +198,16 @@ export function apply(ctx: Context, config: ArenaConfig) {
       const n = result.length >= 6 ? 6 : result.length
       const borderPix = 5
       const width = 5 * iconSize + 100
-      const height = n * (iconSize + borderPix) - borderPix
+      const height = n * (iconSize + borderPix) + 40
 
       await session.send('已查询到解法，正在渲染至图片，首次下载角色资源会耗时较久...')
       return await session.app.canvas.render(width, height, async (cv) => {
         cv.fillStyle = '#fff'
         cv.fillRect(0, 0, width, height)
 
-        cv.font = 'bold 68px sans-serif'
-        cv.textAlign = 'center'
-        cv.textBaseline = 'middle'
+        cv.font = 'bold 32px sans-serif'
+        cv.textAlign = 'left'
+        cv.textBaseline = 'top'
         cv.fillStyle = '#000'
 
         for (let i = 0; i < n; i++) {
@@ -267,6 +268,13 @@ export function apply(ctx: Context, config: ArenaConfig) {
             }
           }
         }
+
+        const support = 'Support by pcrdfans.com'
+        cv.fillText(
+          support,
+          0,
+          (iconSize + borderPix) * n + borderPix,
+        )
       })
     }, true)
 
