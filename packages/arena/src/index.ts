@@ -212,22 +212,21 @@ export function apply(ctx: Context, config: ArenaConfig) {
       const smallIconSize = 20
       const n = result.length >= 6 ? 6 : result.length
       const borderPix = 5
-      const width = 5 * iconSize + 100
+      const width = 5 * iconSize + radius * 2 - 8
       const height = n * (iconSize + borderPix) + fontSize * 2
+      const fontPink = '#f55291'
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const fontBlue = '#1385e5'
+      const borderYellow = '#f5d68e'
 
       await session.send('已查询到解法，正在渲染至图片，首次下载角色资源会耗时较久...')
       return await session.app.canvas.render(width + radius, height + radius, async (cv) => {
-        cv.strokeStyle = '#f5d68e'
+        cv.strokeStyle = borderYellow
         cv.lineWidth = borderPix
         cv.fillStyle = 'rgb(253, 251, 249)'
         roundRect(cv, radius / 5, radius / 5, width, height, radius)
         cv.fill()
         cv.stroke()
-
-        cv.font = `bold ${fontSize}px sans-serif`
-        cv.textAlign = 'left'
-        cv.textBaseline = 'top'
-        cv.fillStyle = '#000'
 
         for (let i = 0; i < n; i++) {
           for (let j = 0; j < 5; j++) {
@@ -288,6 +287,10 @@ export function apply(ctx: Context, config: ArenaConfig) {
           }
         }
 
+        cv.font = `bolder ${fontSize}px sans-serif`
+        cv.textAlign = 'left'
+        cv.textBaseline = 'top'
+        cv.fillStyle = fontPink
         const support = 'Support by pcrdfans.com'
         cv.fillText(
           support,
