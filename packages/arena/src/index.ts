@@ -110,6 +110,20 @@ export class Arena extends Service {
   }
 }
 
+function roundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath()
+  ctx.moveTo(x + radius, y)
+  ctx.lineTo(x + width - radius, y)
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius)
+  ctx.lineTo(x + width, y + height - radius)
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height)
+  ctx.lineTo(x + radius, y + height)
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius)
+  ctx.lineTo(x, y + radius)
+  ctx.quadraticCurveTo(x, y, x + radius, y)
+  ctx.closePath()
+}
+
 export function apply(ctx: Context, config: ArenaConfig) {
   ctx.plugin(Arena, config)
   ctx.inject(['arena'], (ctx) => {
@@ -192,19 +206,25 @@ export function apply(ctx: Context, config: ArenaConfig) {
         return `没有查询到解法\n作业上传请前往 pcrdfans`
       }
 
+      const radius = 20
       const iconSize = 128
+      const fontSize = 32
       const smallIconSize = 20
       const n = result.length >= 6 ? 6 : result.length
       const borderPix = 5
       const width = 5 * iconSize + 100
-      const height = n * (iconSize + borderPix) + 40
+      const height = n * (iconSize + borderPix) + fontSize * 2
 
       await session.send('已查询到解法，正在渲染至图片，首次下载角色资源会耗时较久...')
-      return await session.app.canvas.render(width, height, async (cv) => {
-        cv.fillStyle = '#fff'
-        cv.fillRect(0, 0, width, height)
+      return await session.app.canvas.render(width + radius, height + radius, async (cv) => {
+        cv.strokeStyle = '#f5d68e'
+        cv.lineWidth = borderPix
+        cv.fillStyle = 'rgb(253, 251, 249)'
+        roundRect(cv, radius / 5, radius / 5, width, height, radius)
+        cv.fill()
+        cv.stroke()
 
-        cv.font = 'bold 32px sans-serif'
+        cv.font = `bold ${fontSize}px sans-serif`
         cv.textAlign = 'left'
         cv.textBaseline = 'top'
         cv.fillStyle = '#000'
@@ -217,8 +237,8 @@ export function apply(ctx: Context, config: ArenaConfig) {
             ctx.logger.debug(`atk star: ${atk.star}`)
             ctx.logger.debug(`star: ${star}`)
 
-            const x = iconSize * j
-            const y = (iconSize + borderPix) * i
+            const x = iconSize * j + radius
+            const y = (iconSize + borderPix) * i + radius
             const image = await ctx.pcr.getUnitIcon(atk.id.toString().slice(0, -2), star, true)
             cv.drawImage(
               image.buffer as Image,
@@ -271,8 +291,8 @@ export function apply(ctx: Context, config: ArenaConfig) {
         const support = 'Support by pcrdfans.com'
         cv.fillText(
           support,
-          0,
-          (iconSize + borderPix) * n + borderPix,
+          radius,
+          (iconSize + borderPix) * n + radius,
         )
       })
     }, true)
