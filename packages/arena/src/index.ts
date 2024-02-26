@@ -2,7 +2,7 @@ import { Image } from '@koishijs/canvas'
 import { Context } from 'koishi'
 
 import { Arena } from './api'
-import { ArenaConfig } from './config'
+import { Config } from './config'
 import type { } from 'koishi-plugin-canvas'
 import type { } from 'koishi-plugin-pcr'
 
@@ -16,7 +16,9 @@ declare module 'koishi' {
 
 export const inject = ['pcr', 'canvas']
 
-export function apply(ctx: Context, config: ArenaConfig) {
+export { Arena, Config }
+
+export function apply(ctx: Context, config: Config) {
   ctx.plugin(Arena, config)
   ctx.inject(['arena'], (ctx) => {
     ctx.middleware(async (session, next) => {

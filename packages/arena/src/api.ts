@@ -5,7 +5,7 @@ import path from 'path'
 import { Image } from '@koishijs/canvas'
 import { Context, Service } from 'koishi'
 
-import { ArenaConfig } from './config'
+import { Config } from './config'
 import { PcrdfansResponse } from './types'
 
 export class Arena extends Service {
@@ -22,9 +22,9 @@ export class Arena extends Service {
   public THUMB_UP: Image
   public NUMBER_YELLOW: Image[] = []
   public NUMBER_BLUE: Image[] = []
-  declare config: ArenaConfig
+  declare config: Config
 
-  constructor(ctx: Context, config: ArenaConfig) {
+  constructor(ctx: Context, config: Config) {
     super(ctx, 'arena', true)
     this.config = config
     this.alias.forEach(a => {

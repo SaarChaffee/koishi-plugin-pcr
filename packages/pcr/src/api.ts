@@ -7,7 +7,7 @@ import { Image } from '@koishijs/canvas'
 import { fromBuffer } from 'file-type'
 import { Context, Service, sanitize } from 'koishi'
 
-import { PCRConfig } from './config'
+import { Config } from './config'
 import { Trie } from './trie'
 import { Chara, CharacterProfile, CharacterProfiles, ImageInfo, Result } from './types'
 
@@ -27,9 +27,9 @@ export class PCR extends Service {
   private root: string
   private trie: Trie
 
-  declare config: PCRConfig
+  declare config: Config
 
-  constructor(ctx: Context, config: PCRConfig) {
+  constructor(ctx: Context, config: Config) {
     super(ctx, 'pcr')
     this.config = config
     this.CHARA_URL = typeof this.config.LandosolRoster === 'string'

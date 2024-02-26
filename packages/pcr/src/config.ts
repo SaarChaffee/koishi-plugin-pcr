@@ -1,11 +1,11 @@
 import { Schema } from 'koishi'
 
-export interface PCRConfig {
+export interface Config {
   root: string
   LandosolRoster: { endpoint: string } | string
 }
 
-export const Config: Schema<PCRConfig> = Schema.object({
+export const Config: Schema<Config> = Schema.object({
   root: Schema.path({
     filters: ['directory'],
     allowCreate: true,
@@ -19,4 +19,4 @@ export const Config: Schema<PCRConfig> = Schema.object({
     }).description('自定义'),
   ]).description('兰德索尔花名册数据源。')
     .default('https://mirror.ghproxy.com/https://raw.githubusercontent.com/Ice9Coffee/LandosolRoster/master'),
-}) as Schema<PCRConfig>
+}) as Schema<Config>

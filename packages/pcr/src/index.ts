@@ -1,8 +1,7 @@
-/* eslint-disable max-len */
 import { Context } from 'koishi'
 
 import { PCR } from './api'
-import { PCRConfig } from './config'
+import { Config } from './config'
 
 export const name = 'pcr'
 
@@ -14,6 +13,8 @@ declare module 'koishi' {
   }
 }
 
-export function apply(ctx: Context, config: PCRConfig) {
+export { PCR, Config }
+
+export function apply(ctx: Context, config: Config) {
   ctx.plugin(PCR, config)
 }
