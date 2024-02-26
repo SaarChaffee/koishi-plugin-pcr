@@ -52,6 +52,12 @@ export class Arena extends Service {
   }
 
   protected async start() {
+    this.EQUIPMENT = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/EQUIPMENT.png')))
+    this.STAR = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/STAR.png')))
+    this.STAR_PINK = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/STAR_PINK.png')))
+    this.STAR_DISABLE = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/STAR_DISABLE.png')))
+    this.THUMB_DOWN = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/THUMB_DOWN_FILL.png')))
+    this.THUMB_UP = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/THUMB_UP_FILL.png')))
     for (let i = 0; i < 10; i++) {
       this.NUMBER_YELLOW.push(await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, `../public/YELLOW_${i}.png`))))
       this.NUMBER_BLUE.push(await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, `../public/BLUE_${i}.png`))))
@@ -215,9 +221,7 @@ export function apply(ctx: Context, config: ArenaConfig) {
       const borderPix = 5
       const width = 5 * iconSize + radius * 2 + (Math.max(...result.map(r => Math.max(r.up, r.down))).toString().length + 1) * numberWidth
       const height = n * (iconSize + borderPix) + fontSize * 2
-      const fontPink = '#f55291'
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const fontBlue = '#1385e5'
+      const fontPink = '#fa5393'
       const borderYellow = '#f5d68e'
 
       await session.send('已查询到解法，正在渲染至图片，首次下载角色资源会耗时较久...')
@@ -240,7 +244,7 @@ export function apply(ctx: Context, config: ArenaConfig) {
             ctx.logger.debug(`star: ${star}`)
 
             x = iconSize * j + radius
-            const y = (iconSize + borderPix) * i + radius
+            y = (iconSize + borderPix) * i + radius
             const image = await ctx.pcr.getUnitIcon(atk.id.toString().slice(0, -2), star, true)
             cv.drawImage(
               image.buffer as Image,
@@ -264,24 +268,24 @@ export function apply(ctx: Context, config: ArenaConfig) {
               if (k === 6 && star === 6) {
                 cv.drawImage(
                   ctx.arena.STAR_PINK,
-                  x + (smallIconSize - borderPix) * (k - 1),
-                  y + iconSize - smallIconSize,
+                  x + (smallIconSize - borderPix) * (k - 1) + 2,
+                  y + iconSize - smallIconSize - 2,
                   smallIconSize,
                   smallIconSize,
                 )
               } else if (k <= star) {
                 cv.drawImage(
                   ctx.arena.STAR,
-                  x + (smallIconSize - borderPix) * (k - 1),
-                  y + iconSize - smallIconSize,
+                  x + (smallIconSize - borderPix) * (k - 1) + 2,
+                  y + iconSize - smallIconSize - 2,
                   smallIconSize,
                   smallIconSize,
                 )
               } else if (k > star && k < 6) {
                 cv.drawImage(
                   ctx.arena.STAR_DISABLE,
-                  x + (smallIconSize - borderPix) * (k - 1),
-                  y + iconSize - smallIconSize,
+                  x + (smallIconSize - borderPix) * (k - 1) + 2,
+                  y + iconSize - smallIconSize - 2,
                   smallIconSize,
                   smallIconSize,
                 )
