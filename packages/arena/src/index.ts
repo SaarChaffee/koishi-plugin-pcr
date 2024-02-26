@@ -36,7 +36,8 @@ export class Arena extends Service {
   public STAR_DISABLE: Image
   public THUMB_DOWN: Image
   public THUMB_UP: Image
-
+  public NUMBER_YELLOW: Image[] = []
+  public NUMBER_BLUE: Image[] = []
   declare config: ArenaConfig
 
   constructor(ctx: Context, config: ArenaConfig) {
@@ -51,12 +52,10 @@ export class Arena extends Service {
   }
 
   protected async start() {
-    this.EQUIPMENT = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/equipment.png')))
-    this.STAR = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/star.png')))
-    this.STAR_PINK = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/star-pink.png')))
-    this.STAR_DISABLE = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/star-disable.png')))
-    this.THUMB_DOWN = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/thumb-down-fill.png')))
-    this.THUMB_UP = await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, '../public/thumb-up-fill.png')))
+    for (let i = 0; i < 10; i++) {
+      this.NUMBER_YELLOW.push(await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, `../public/YELLOW_${i}.png`))))
+      this.NUMBER_BLUE.push(await this.ctx.canvas.loadImage(await readFile(this.normalize(__dirname, `../public/BLUE_${i}.png`))))
+    }
   }
 
   normalize(...file: string[]) {
@@ -209,10 +208,12 @@ export function apply(ctx: Context, config: ArenaConfig) {
       const radius = 20
       const iconSize = 128
       const fontSize = 32
+      const numberHeight = 46
+      const numberWidth = 35
       const smallIconSize = 20
       const n = result.length >= 6 ? 6 : result.length
       const borderPix = 5
-      const width = 5 * iconSize + radius * 2 - 8
+      const width = 5 * iconSize + radius * 2 + (Math.max(...result.map(r => Math.max(r.up, r.down))).toString().length + 1) * numberWidth
       const height = n * (iconSize + borderPix) + fontSize * 2
       const fontPink = '#f55291'
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -229,6 +230,8 @@ export function apply(ctx: Context, config: ArenaConfig) {
         cv.stroke()
 
         for (let i = 0; i < n; i++) {
+          let x = 0
+          let y = 0
           for (let j = 0; j < 5; j++) {
             ctx.logger.debug(`i: ${i}, j: ${j}`)
             const atk = result[i].atk[j]
@@ -236,7 +239,7 @@ export function apply(ctx: Context, config: ArenaConfig) {
             ctx.logger.debug(`atk star: ${atk.star}`)
             ctx.logger.debug(`star: ${star}`)
 
-            const x = iconSize * j + radius
+            x = iconSize * j + radius
             const y = (iconSize + borderPix) * i + radius
             const image = await ctx.pcr.getUnitIcon(atk.id.toString().slice(0, -2), star, true)
             cv.drawImage(
@@ -283,6 +286,47 @@ export function apply(ctx: Context, config: ArenaConfig) {
                   smallIconSize,
                 )
               }
+            }
+          }
+
+          x += iconSize
+          y += 9
+          cv.drawImage(
+            ctx.arena.THUMB_UP,
+            x,
+            y,
+            numberHeight,
+            numberHeight,
+          )
+          cv.drawImage(
+            ctx.arena.THUMB_DOWN,
+            x,
+            y + iconSize / 2,
+            numberHeight,
+            numberHeight,
+          )
+
+          x += numberHeight
+          const up = result[i].up.toString()
+          const down = result[i].down.toString()
+          for (let i = 0; i < Math.max(up.length, down.length); i++) {
+            if (i < up.length) {
+              cv.drawImage(
+                ctx.arena.NUMBER_YELLOW[Number(up[i])],
+                x + numberWidth * i,
+                y,
+                numberWidth,
+                numberHeight,
+              )
+            }
+            if (i < down.length) {
+              cv.drawImage(
+                ctx.arena.NUMBER_BLUE[Number(down[i])],
+                x + numberWidth * i,
+                y + iconSize / 2,
+                numberWidth,
+                numberHeight,
+              )
             }
           }
         }
