@@ -1,7 +1,3 @@
-export interface ArenaConfig {
-  API_KEY: string
-}
-
 export interface PcrdfansResponse {
   code: number
   message: string

@@ -7,8 +7,9 @@ import { Image } from '@koishijs/canvas'
 import { fromBuffer } from 'file-type'
 import { Context, Service, sanitize } from 'koishi'
 
+import { PCRConfig } from './config'
 import { Trie } from './trie'
-import { Chara, CharacterProfile, CharacterProfiles, ImageInfo, PCRConfig, Result } from './types'
+import { Chara, CharacterProfile, CharacterProfiles, ImageInfo, Result } from './types'
 
 export class PCR extends Service {
   private CHARA_URL: string

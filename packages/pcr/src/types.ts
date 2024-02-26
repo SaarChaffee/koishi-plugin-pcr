@@ -61,11 +61,6 @@ export interface CharacterProfiles {
   [key: string]: CharacterProfile
 }
 
-export interface PCRConfig {
-  root: string
-  LandosolRoster: { endpoint: string } | string
-}
-
 export interface ImageInfo {
   buffer: Buffer | Image
   type: string
