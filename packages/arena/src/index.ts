@@ -24,8 +24,9 @@ export function apply(ctx: Context, config: Config) {
     ctx.middleware(async (session, next) => {
       const elemnts = session.elements
       const selfId = session.bot.selfId
-      const prefix: string | Object = session.app.config.prefix.valueOf()
+      const prefix: string | string[] = session.app.config.prefix.valueOf()
       ctx.logger.debug(elemnts)
+      ctx.logger.debug(prefix)
 
       if (elemnts[0].type === 'at' && elemnts[0].attrs?.id === selfId) {
         elemnts.shift()
