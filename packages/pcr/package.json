@@ -43,7 +43,9 @@
       "implements": [
         "pcr"
       ],
-      "optional": []
+      "optional": [
+        "landosol-roster"
+      ]
     }
   },
   "peerDependencies": {

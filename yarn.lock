@@ -5219,7 +5219,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"koishi-plugin-pcr@workspace:packages/pcr":
+"koishi-plugin-pcr-landosol-roster@workspace:packages/landosol-roster":
+  version: 0.0.0-use.local
+  resolution: "koishi-plugin-pcr-landosol-roster@workspace:packages/landosol-roster"
+  dependencies:
+    koishi-plugin-pcr: "npm:^1.0.0"
+  peerDependencies:
+    koishi: ^4.17.1
+    koishi-plugin-pcr: ^1.0.0
+  languageName: unknown
+  linkType: soft
+
+"koishi-plugin-pcr@npm:^1.0.0, koishi-plugin-pcr@workspace:packages/pcr":
   version: 0.0.0-use.local
   resolution: "koishi-plugin-pcr@workspace:packages/pcr"
   dependencies:

@@ -2,6 +2,7 @@ import { existsSync } from 'fs'
 import { mkdir, readFile, writeFile } from 'fs/promises'
 import { dirname, join } from 'path'
 
+import type { } from 'koishi-plugin-pcr-landosol-roster'
 import type { } from 'koishi-plugin-canvas'
 import { Image } from '@koishijs/canvas'
 import { fromBuffer } from 'file-type'
@@ -26,23 +27,33 @@ export class PCR extends Service {
   private unavailableChara: number[] = []
   private root: string
   private trie: Trie
+  private reloading: boolean
 
   declare config: Config
 
   constructor(ctx: Context, config: Config) {
     super(ctx, 'pcr')
     this.config = config
-    this.CHARA_URL = typeof this.config.LandosolRoster === 'string'
-      ? this.config.LandosolRoster
-      : this.config.LandosolRoster.endpoint
+    this.CHARA_URL = this.config['landosol-roster']
+      ? ''
+      : typeof this.config.source === 'string'
+        ? this.config.source
+        : this.config.source.endpoint
     this.trie = new Trie()
     this.root = join(this.ctx.baseDir, this.config.root)
+    this.reloading = false
   }
 
   protected async start() {
-    await this.initCharaName()
-    await this.initCharaProfile()
-    await this.initUnavailableChara()
+    if (this.config['landosol-roster'] && this.ctx['landosol-roster']) {
+      await this.initCharaName(this.ctx['landosol-roster'].charaName() as Result)
+      await this.initCharaProfile(this.ctx['landosol-roster'].charaProfile() as CharacterProfiles)
+      await this.initUnavailableChara(this.ctx['landosol-roster'].unavailableChara())
+    } else {
+      await this.initCharaName()
+      await this.initCharaProfile()
+      await this.initUnavailableChara()
+    }
   }
 
   getRoot() {
@@ -116,6 +127,25 @@ export class PCR extends Service {
     res ||= await this.ctx.http.get(this.CHARA_URL + this.UNAVAILABLE_CHARA, { responseType: 'json' })
     this.ctx.logger.debug(res)
     this.unavailableChara = res
+  }
+
+  isReloading(): boolean {
+    return this.reloading
+  }
+
+  async reloadRoster() {
+    this.trie = new Trie()
+    this.charaName = {}
+    await this.initCharaName(this.ctx['landosol-roster'].charaName() as Result)
+    await this.initCharaProfile(this.ctx['landosol-roster'].charaProfile() as CharacterProfiles)
+    await this.initUnavailableChara(this.ctx['landosol-roster'].unavailableChara())
+    this.reloading = false
+  }
+
+  clearRoster() {
+    this.reloading = true
+    this.trie = null
+    this.charaName = {}
   }
 
   getCharaProfile(id: string): CharacterProfile {
