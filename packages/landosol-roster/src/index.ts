@@ -7,8 +7,8 @@ declare module 'koishi' {
     'landosol-roster': LandosolRoster
   }
   interface Events {
-    'pcr/landosol-rester-start'(): void
-    'pcr/landosol-rester-stop'(): void
+    'pcr/landosol-roster-start'(): void
+    'pcr/landosol-roster-stop'(): void
   }
 }
 
@@ -43,10 +43,10 @@ export function apply(ctx: Context) {
   ctx.plugin(LandosolRoster)
 
   ctx.on('ready', () => {
-    ctx.emit('pcr/landosol-rester-start')
+    ctx.emit('pcr/landosol-roster-start')
   })
 
   ctx.on('dispose', () => {
-    ctx.emit('pcr/landosol-rester-stop')
+    ctx.emit('pcr/landosol-roster-stop')
   })
 }

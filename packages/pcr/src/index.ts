@@ -23,14 +23,14 @@ export function apply(ctx: Context, config: Config) {
   ctx.plugin(PCR, config)
 
   ctx.inject(['pcr'], (ctx) => {
-    ctx.on('pcr/landosol-rester-start', async () => {
+    ctx.on('pcr/landosol-roster-start', async () => {
       ctx.logger.debug('landosol-roster started')
       if (ctx.pcr.isReloading()) {
         await ctx.pcr.reloadRoster()
       }
     })
 
-    ctx.on('pcr/landosol-rester-stop', () => {
+    ctx.on('pcr/landosol-roster-stop', () => {
       ctx.logger.debug('landosol-roster stopped')
       ctx.pcr.clearRoster()
     })
