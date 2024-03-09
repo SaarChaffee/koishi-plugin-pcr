@@ -1,0 +1,55 @@
+{
+  "name": "koishi-plugin-pcr-landosol-roster",
+  "description": "PCR 兰德索尔花名册",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist",
+    "data/*.json"
+  ],
+  "author": "SaarChaffee <saarchaffee@qq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaarChaffee/koishi-plugin-pcr.git",
+    "directory": "packages/landosol-roster"
+  },
+  "bugs": {
+    "url": "https://github.com/SaarChaffee/koishi-plugin-pcr/issues"
+  },
+  "homepage": "https://github.com/SaarChaffee/koishi-plugin-pcr",
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "service",
+    "plugin",
+    "pcr",
+    "公主连结",
+    "公主连结Re:Dive",
+    "公主連結R",
+    "超異域公主連結☆Re:Dive",
+    "プリコネR",
+    "プリンセスコネクト！Re:Dive",
+    "兰德索尔花名册",
+    "Landosol Roster"
+  ],
+  "koishi": {
+    "description": {
+      "zh": "PCR 兰德索尔花名册"
+    },
+    "service": {
+      "implements": [
+        "landosol-roster"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "koishi": "^4.17.1",
+    "koishi-plugin-pcr": "^1.0.0"
+  },
+  "devDependencies": {
+    "koishi-plugin-pcr": "^1.0.0"
+  }
+}
