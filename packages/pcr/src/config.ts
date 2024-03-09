@@ -27,6 +27,6 @@ export const Config: Schema<Config> = Schema.intersect([
       ]).description('兰德索尔花名册数据源。')
         .default('https://mirror.ghproxy.com/https://raw.githubusercontent.com/Ice9Coffee/LandosolRoster/master'),
     }),
-    Schema.object({})
+    Schema.object({}),
   ]),
 ]) as Schema<Config>
