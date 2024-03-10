@@ -11,7 +11,13 @@
 
 存储图片资源文件的路径，相对于 koishi 的工作目录。
 
-### config.LandosolRoster
+### config['landosol-roster']
+- 类型: `boolean`
+- 默认值: `false`
+
+是否使用本地的兰德索尔花名册数据源。需要安装 [pcr-landosol-roster](https://github.com/SaarChaffee/koishi-plugin-pcr/tree/master/packages/landosol-roster) 插件。启用后，将会接管下一项配置的数据源。
+
+### config.source
 
 - 类型: `string`
 - 默认值: `Ghproxy 代理的 Github`
@@ -97,21 +103,34 @@ export interface ImageInfo {
 
 ### pcr.initCharaName(res?)
 - 参数:
-  - `res?: Result` - 角色名字及昵称，缺省则从 [兰德索尔花名册](#configlandosolroster) 获取
+  - `res?: Result` - 角色名字及昵称，缺省则从 [兰德索尔花名册](#configsource) 获取
 
 初始化角色名字及昵称。会将其存入字典树中以便使用。
 
 ### pcr.initCharaProfile(res?)
 - 参数:
-  - `res?: CharacterProfiles` - 角色资料，缺省则从 [兰德索尔花名册](#configlandosolroster) 获取
+  - `res?: CharacterProfiles` - 角色资料，缺省则从 [兰德索尔花名册](#configsource) 获取
 
 初始化角色资料。
 
 ### pcr.initUnavailableChara(res?)
 - 参数:
-  - `res?: number[]` - 未实装的角色的 ID 列表，缺省则从 [兰德索尔花名册](#configlandosolroster) 获取
+  - `res?: number[]` - 未实装的角色的 ID 列表，缺省则从 [兰德索尔花名册](#configsource) 获取
 
 初始化未实装的角色的 ID。
+
+### pcr.isReloading()
+- 返回值: `boolean`
+
+获得 pcr 插件的数据状态
+
+### pcr.reloadRoster()
+
+重新加载本地的 [兰德索尔花名册](#configsource) 数据。需要安装 [pcr-landosol-roster](https://github.com/SaarChaffee/koishi-plugin-pcr/tree/master/packages/landosol-roster) 插件。
+
+### pcr.clearRoster()
+
+清除 [兰德索尔花名册](#configsource) 数据。
 
 ### pcr.getCharaProfile(id)
 - 参数:
