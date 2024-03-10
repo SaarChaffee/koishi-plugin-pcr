@@ -10,10 +10,11 @@
 
 ## 插件列表
 
-|名称|按本|描述|
-|:-:|:-:|:-:|
-| [pcr](https://github.com/SaarChaffee/koishi-plugin-pcr/tree/master/packages/pcr) | [![NPM](https://img.shields.io/npm/v/koishi-plugin-pcr?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-pcr) | 核心插件 |
-| [pcr-arena](https://github.com/SaarChaffee/koishi-plugin-pcr/tree/master/packages/arena) | [![NPM](https://img.shields.io/npm/v/koishi-plugin-pcr-arena?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-pcr-arena) | 竞技场查询 |
+|                                                     名称                                                     |                                                                            按本                                                                             |      描述      |
+| :----------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------: |
+|               [pcr](https://github.com/SaarChaffee/koishi-plugin-pcr/tree/master/packages/pcr)               |                 [![NPM](https://img.shields.io/npm/v/koishi-plugin-pcr?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-pcr)                 |    核心插件    |
+|           [pcr-arena](https://github.com/SaarChaffee/koishi-plugin-pcr/tree/master/packages/arena)           |           [![NPM](https://img.shields.io/npm/v/koishi-plugin-pcr-arena?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-pcr-arena)           |   竞技场查询   |
+| [pcr-landosol-roster](https://github.com/SaarChaffee/koishi-plugin-pcr/tree/master/packages/landosol-roster) | [![NPM](https://img.shields.io/npm/v/koishi-plugin-pcr-landosol-roster?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-pcr-landosol-roster) | 兰德索尔花名册 |
 
 ## 安装方式
 
@@ -28,4 +29,5 @@ $ npm install --save koishi-plugin-名称
 ```
 
 ## 许可证
+
 该项目遵循 [MIT](./LICENSE) 协议
