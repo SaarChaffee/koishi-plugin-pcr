@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     uses: cordiverse/workflows/.github/workflows/build.yml@main
+    permissions:
+      pull-requests: write
+      issues: write
     with:
       lint: true
       test: false
