@@ -28,6 +28,9 @@ export function apply(ctx: Context, config: Config) {
       ctx.logger.debug(elemnts)
       ctx.logger.debug(prefix)
 
+      if (!elemnts || !elemnts.length) {
+        return next()
+      }
       if (elemnts[0].type === 'at' && elemnts[0].attrs?.id === selfId) {
         elemnts.shift()
       }
