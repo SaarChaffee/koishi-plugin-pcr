@@ -46,10 +46,6 @@
     }
   },
   "peerDependencies": {
-    "koishi": "^4.17.1",
-    "koishi-plugin-pcr": "^1.0.0"
-  },
-  "devDependencies": {
-    "koishi-plugin-pcr": "^1.0.0"
+    "koishi": "^4.17.1"
   }
 }

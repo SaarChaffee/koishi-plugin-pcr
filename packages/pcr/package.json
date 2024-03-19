@@ -49,10 +49,12 @@
     }
   },
   "peerDependencies": {
-    "koishi": "^4.17.1"
+    "koishi": "^4.17.1",
+    "koishi-plugin-pcr-landosol-roster": "^0.0.2"
   },
   "devDependencies": {
-    "koishi-plugin-canvas": "^0.2.2"
+    "koishi-plugin-canvas": "^0.2.2",
+    "koishi-plugin-pcr-landosol-roster": "^0.0.2"
   },
   "dependencies": {
     "file-type": "^16.5.4"
