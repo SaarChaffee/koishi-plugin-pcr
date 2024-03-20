@@ -22,23 +22,26 @@ export function apply(ctx: Context, config: Config) {
   ctx.plugin(Arena, config)
   ctx.inject(['arena'], (ctx) => {
     ctx.middleware(async (session, next) => {
-      const elemnts = session.elements
+      const elements = session.elements
       const selfId = session.bot.selfId
       const prefix: string | string[] = session.app.config.prefix.valueOf()
-      ctx.logger.debug(elemnts)
+      ctx.logger.debug(elements)
       ctx.logger.debug(prefix)
 
-      if (!elemnts || !elemnts.length) {
+      if (!elements || !elements.length) {
         return next()
       }
-      if (elemnts[0].type === 'at' && elemnts[0].attrs?.id === selfId) {
-        elemnts.shift()
+      // if (!elements[0].type) {
+      //   ctx.logger.error(elements)
+      // }
+      if (elements[0].type === 'at' && elements[0].attrs?.id === selfId) {
+        elements.shift()
       }
-      if (elemnts[0].type !== 'text') {
+      if (elements[0].type !== 'text') {
         return next()
       }
 
-      let msg: string = elemnts[0].attrs.content.trim()
+      let msg: string = elements[0].attrs.content.trim()
       if (typeof prefix === 'string') {
         if (msg.startsWith(prefix)) {
           msg = msg.substring(prefix.length, msg.length)
