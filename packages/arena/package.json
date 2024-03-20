@@ -47,12 +47,10 @@
       "zh": "PCR jjc 插件"
     },
     "service": {
-      "implements": [],
       "required": [
         "pcr",
         "canvas"
-      ],
-      "optional": []
+      ]
     }
   },
   "peerDependencies": {
