@@ -12,7 +12,21 @@ jobs:
       - name: Setup
         uses: cordiverse/workflows/.github/actions/setup@main
 
+      - name: Check File Changes
+        id: check-changes
+        run: |
+          COMMIT_ID=$(git rev-parse HEAD)
+          FILE_CHANGES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_ID | grep 'packages/landosol-roster/package.json')
+          if [ -z "$FILE_CHANGES" ]; then
+            echo "File changes not found."
+            echo "file_changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "File changes found."
+            echo "file_changed=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Get Datas
+        if: steps.check-changes.outputs.file_changed
         run: |
           npm pack koishi-plugin-pcr-landosol-roster
           tar -zxvf koishi-plugin-pcr-landosol-roster-*.tgz \
@@ -24,6 +38,7 @@ jobs:
           ls -alF packages/landosol-roster/data
 
       - name: Get Hash
+        if: steps.check-changes.outputs.file_changed
         id: current-hash
         run: |
           echo "chara_name=$(sha256sum packages/landosol-roster/data/chara_name.json | awk '{print $1}')" >> $GITHUB_OUTPUT
@@ -31,15 +46,18 @@ jobs:
           echo "unavailable_chara=$(sha256sum packages/landosol-roster/data/unavailable_chara.json | awk '{print $1}')" >> $GITHUB_OUTPUT
 
       - name: Create Folder
+        if: steps.check-changes.outputs.file_changed
         run: mkdir LandosolRoster
 
       - name: Get Landosol Roster Data
+        if: steps.check-changes.outputs.file_changed
         uses: actions/checkout@v4
         with:
           repository: 'Ice9Coffee/LandosolRoster'
           path: 'LandosolRoster'
 
       - name: Get Landosol Roster Data Hash
+        if: steps.check-changes.outputs.file_changed
         id: remote-hash
         run: |
           echo "chara_name=$(sha256sum LandosolRoster/chara_name.json | awk '{print $1}')" >> $GITHUB_OUTPUT
@@ -47,58 +65,46 @@ jobs:
           echo "unavailable_chara=$(sha256sum LandosolRoster/unavailable_chara.json | awk '{print $1}')" >> $GITHUB_OUTPUT
 
       - name: CAS Chara Name
-        id: cas-chara-name
-        if: steps.current-hash.outputs.chara_name != steps.remote-hash.outputs.chara_name
-        run: |
-          cp LandosolRoster/chara_name.json packages/landosol-roster/data/chara_name.json
-          echo "cas=true" >> $GITHUB_OUTPUT
+        if: steps.check-changes.outputs.file_changed && steps.current-hash.outputs.chara_name != steps.remote-hash.outputs.chara_name
+        run: cp LandosolRoster/chara_name.json packages/landosol-roster/data/chara_name.json
 
       - name: CAS Chara Profile
-        id: cas-chara-profile
-        if: steps.current-hash.outputs.chara_profile != steps.remote-hash.outputs.chara_profile
-        run: |
-          cp LandosolRoster/chara_profile.json packages/landosol-roster/data/chara_profile.json
-          echo "cas=true" >> $GITHUB_OUTPUT
+        if: steps.check-changes.outputs.file_changed && steps.current-hash.outputs.chara_profile != steps.remote-hash.outputs.chara_profile
+        run: cp LandosolRoster/chara_profile.json packages/landosol-roster/data/chara_profile.json
 
       - name: CAS Unavailable Name
-        id: cas-unavailable-name
-        if: steps.current-hash.outputs.unavailable_name != steps.remote-hash.outputs.unavailable_name
+        if: steps.check-changes.outputs.file_changed && steps.current-hash.outputs.unavailable_name != steps.remote-hash.outputs.unavailable_name
+        run: cp LandosolRoster/unavailable_name.json packages/landosol-roster/data/unavailable_name.json
+
+      - name: Build
         run: |
-          cp LandosolRoster/unavailable_name.json packages/landosol-roster/data/unavailable_name.json
-          echo "cas=true" >> $GITHUB_OUTPUT
+          (yarn build 2>&1) | tee build.log
+          exit ${PIPESTATUS[0]}
 
-      - name: is change
-        if: steps.cas-chara-name.outputs.cas || steps.cas-chara-profile.outputs.cas || steps.cas-unavailable-name.outputs.cas
-        run: echo 'change!'
-  #     - name: Build
-  #       run: |
-  #         (yarn build 2>&1) | tee build.log
-  #         exit ${PIPESTATUS[0]}
+      - name: Create Result Markdown
+        if: ${{ success() || failure() }}
+        run: |
+          tee -a output.md <<EOF
+          ### Build $([ "${{ job.status }}" = 'success' ] && echo "✅" || echo "❌")
 
-  #     - name: Create Result Markdown
-  #       if: ${{ success() || failure() }}
-  #       run: |
-  #         tee -a output.md <<EOF
-  #         ### Build $([ "${{ job.status }}" = 'success' ] && echo "✅" || echo "❌")
+          <details>
+            <summary>Details</summary>
 
-  #         <details>
-  #           <summary>Details</summary>
+            \`\`\`shell
+            $(cat build.log)
+            \`\`\`
+          </details>
 
-  #           \`\`\`shell
-  #           $(cat build.log)
-  #           \`\`\`
-  #         </details>
+          EOF
 
-  #         EOF
-
-  #     - name: Upload Build Log
-  #       if: ${{ success() || failure() }}
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: build-log
-  #         path: output.md
-
-  # publish:
-  #   uses: cordiverse/workflows/.github/workflows/publish.yml@main
-  #   secrets:
-  #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Upload Build Log
+        if: ${{ success() || failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: output.md
+          
+  publish:
+    uses: cordiverse/workflows/.github/workflows/publish.yml@main
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

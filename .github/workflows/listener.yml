@@ -1,0 +1,73 @@
+name: Check New Commit and Bump Version
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-commit:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        uses: cordiverse/workflows/.github/actions/setup@main
+
+      - name: Checkout Landosol Roster
+        uses: actions/checkout@v4
+        with:
+          repository: Ice9Coffee/LandosolRoster
+          path: LandosolRoster
+
+      - name: Get latest commit SHA
+        id: lastest-commit
+        run: |
+          latest_commit_sha=$(git -C LandosolRoster log -1 --format=%h)
+          version=$(jq -r '.version' packages/landosol-roster/package.json | awk '{print $1}')
+          if [[ $sha == *"+"* ]]; then
+            sha=${version#*+}
+            echo $sha
+          else
+            sha=""
+            echo "None commit hash."
+          fi
+          if [[ $sha != $latest_commit_sha ]]; then
+            echo "New commit found."
+            echo "IS_NEW_COMMIT_SHA=true" >> $GITHUB_OUTPUT
+            echo "LATEST_COMMIT_SHA=$latest_commit_sha" >> $GITHUB_OUTPUT
+          else
+            echo "No new commit found."
+            echo "IS_NEW_COMMIT_SHA=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get latest commit message
+        id: lastest-commit-message
+        run: |
+          latest_commit_message=$(git -C LandosolRoster log -1 --format=%s)
+          echo $latest_commit_message
+          if [[ $latest_commit_message == "auto sync to json" ]]; then
+            echo "LATEST_COMMIT_MESSAGE=$latest_commit_message" >> $GITHUB_OUTPUT
+            echo "IS_SYNC=true" >> $GITHUB_OUTPUT
+          else
+            echo "IS_SYNC=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Bump version
+        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA && steps.lastest-commit-message.outputs.IS_SYNC
+        run: |
+          yarn bump -3 landosol-roster
+
+          version=$(jq -r '.version' packages/landosol-roster/package.json | awk '{print $1}')
+          latest_commit_sha=${{steps.lastest-commit.outputs.LATEST_COMMIT_SHA}}
+          version="${version}+${commit_sha}"
+          echo "Bump version to $version."
+
+          jq --arg version "$version" '.version = $version' packages/landosol-roster/package.json > package.json.tmp && mv package.json.tmp packages/landosol-roster/package.json
+
+      - name: Commit and push
+        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA && steps.lastest-commit-message.outputs.IS_SYNC
+        run: |
+          git add packages/landosol-roster/package.json
+          git commit -m "chore: auto bump version"
+          git push origin master
