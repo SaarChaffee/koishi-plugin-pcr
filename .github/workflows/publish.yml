@@ -14,15 +14,14 @@ jobs:
 
       - name: Get Datas
         run: |
-          ls -alF
-          ls -alF ../
           npm pack koishi-plugin-pcr-landosol-roster
-          tar -xzf koishi-plugin-pcr-landosol-roster-*.tgz \
+          tar -zxvf koishi-plugin-pcr-landosol-roster-*.tgz \
           -C 'packages/landosol-roster/data' \
           'package/data/chara_name.json' \
           'package/data/chara_profile.json' \
           'package/data/unavailable_chara.json'
           ls -alF packages/landosol-roster/data
+          ls -alF packages/landosol-roster/data/package
 
       - name: Get Hash
         id: current-hash
