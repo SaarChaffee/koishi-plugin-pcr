@@ -30,17 +30,46 @@ jobs:
           echo "chara_profile=$(sha256sum packages/landosol-roster/data/chara_profile.json | awk '{print $1}')" >> $GITHUB_OUTPUT
           echo "unavailable_chara=$(sha256sum packages/landosol-roster/data/unavailable_chara.json | awk '{print $1}')" >> $GITHUB_OUTPUT
 
-      # - name: Create Folder
-      #   run: mkdir LandosolRoster
+      - name: Create Folder
+        run: mkdir LandosolRoster
 
-      # - name: Get Landosol Roster Data
-      #   uses: actions/checkout@v4
-      #   with:
-      #     repository: 'Ice9Coffee/LandosolRoster'
-      #     path: 'LandosolRoster'
+      - name: Get Landosol Roster Data
+        uses: actions/checkout@v4
+        with:
+          repository: 'Ice9Coffee/LandosolRoster'
+          path: 'LandosolRoster'
 
-      # - name: Get Landosol Roster Data Hash
-      #   run: ls -alF LandosolRoster
+      - name: Get Landosol Roster Data Hash
+        id: remote-hash
+        run: |
+          echo "chara_name=$(sha256sum LandosolRoster/chara_name.json | awk '{print $1}')" >> $GITHUB_OUTPUT
+          echo "chara_profile=$(sha256sum LandosolRoster/chara_profile.json | awk '{print $1}')" >> $GITHUB_OUTPUT
+          echo "unavailable_chara=$(sha256sum LandosolRoster/unavailable_chara.json | awk '{print $1}')" >> $GITHUB_OUTPUT
+
+      - name: CAS Chara Name
+        id: cas-chara-name
+        if: steps.current-hash.outputs.chara_name != steps.remote-hash.outputs.chara_name
+        run: |
+          cp LandosolRoster/chara_name.json packages/landosol-roster/data/chara_name.json
+          echo "cas=true" >> $GITHUB_OUTPUT
+
+      - name: CAS Chara Profile
+        id: cas-chara-profile
+        if: steps.current-hash.outputs.chara_profile != steps.remote-hash.outputs.chara_profile
+        run: |
+          cp LandosolRoster/chara_profile.json packages/landosol-roster/data/chara_profile.json
+          echo "cas=true" >> $GITHUB_OUTPUT
+
+      - name: CAS Unavailable Name
+        id: cas-unavailable-name
+        if: steps.current-hash.outputs.unavailable_name != steps.remote-hash.outputs.unavailable_name
+        run: |
+          cp LandosolRoster/unavailable_name.json packages/landosol-roster/data/unavailable_name.json
+          echo "cas=true" >> $GITHUB_OUTPUT
+
+      - name: is change
+        if: steps.cas-chara-name.outputs.cas || steps.cas-chara-profile.outputs.cas || steps.cas-unavailable-name.outputs.cas
+        run: echo 'change!'
   #     - name: Build
   #       run: |
   #         (yarn build 2>&1) | tee build.log
@@ -68,6 +97,7 @@ jobs:
   #       with:
   #         name: build-log
   #         path: output.md
+
   # publish:
   #   uses: cordiverse/workflows/.github/workflows/publish.yml@main
   #   secrets:
