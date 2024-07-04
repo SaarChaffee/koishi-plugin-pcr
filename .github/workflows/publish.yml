@@ -6,7 +6,43 @@ on:
       - master
 
 jobs:
-  publish:
-    uses: cordiverse/workflows/.github/workflows/publish.yml@main
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Setup
+      #   uses: cordiverse/workflows/.github/actions/setup@main
+
+      - name: Get Datas
+        run: ls -alF
+
+  #     - name: Build
+  #       run: |
+  #         (yarn build 2>&1) | tee build.log
+  #         exit ${PIPESTATUS[0]}
+
+  #     - name: Create Result Markdown
+  #       if: ${{ success() || failure() }}
+  #       run: |
+  #         tee -a output.md <<EOF
+  #         ### Build $([ "${{ job.status }}" = 'success' ] && echo "✅" || echo "❌")
+
+  #         <details>
+  #           <summary>Details</summary>
+
+  #           \`\`\`shell
+  #           $(cat build.log)
+  #           \`\`\`
+  #         </details>
+
+  #         EOF
+
+  #     - name: Upload Build Log
+  #       if: ${{ success() || failure() }}
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: build-log
+  #         path: output.md
+  # publish:
+  #   uses: cordiverse/workflows/.github/workflows/publish.yml@main
+  #   secrets:
+  #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
