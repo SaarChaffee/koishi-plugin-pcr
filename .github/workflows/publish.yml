@@ -14,10 +14,31 @@ jobs:
 
       - name: Get Datas
         run: |
-          ls -alF
-          cd node_modules
-          ls -alF | grep koishi-plugin-pcr-landosol-roster
+          npm pack koishi-plugin-pcr-landosol-roster
+          tar -xzf koishi-plugin-pcr-landosol-roster-*.tgz \
+          -C 'packages/landosol-roster/data' \
+          'data/chara_name.json' \
+          'data/chara_profile.json' \
+          'data/unavailable_chara.json'
 
+      - name: Get Hash
+        id: current-hash
+        run: |
+          echo "::set-output name=chara_name::$(sha256sum packages/landosol-roster/data/chara_name.json | awk '{print $1}')"
+          echo "::set-output name=chara_profile::$(sha256sum packages/landosol-roster/data/chara_profile.json | awk '{print $1}')"
+          echo "::set-output name=unavailable_chara::$(sha256sum packages/landosol-roster/data/unavailable_chara.json | awk '{print $1}')"
+
+      - name: Create Folder
+        run: mkdir LandosolRoster
+
+      - name: Get Landosol Roster Data
+        uses: actions/checkout@v4
+        with:
+          repository: 'Ice9Coffee/LandosolRoster'
+          path: 'LandosolRoster'
+
+      - name: Get Landosol Roster Data Hasn
+        run: ls -alF LandosolRoster
   #     - name: Build
   #       run: |
   #         (yarn build 2>&1) | tee build.log
