@@ -76,3 +76,7 @@ jobs:
           git add packages/landosol-roster/package.json
           git commit -m "chore: auto bump version"
           git push origin master
+
+      - name: Run Publish
+        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA && steps.lastest-commit-message.outputs.IS_SYNC
+        uses: ./.github/workflows/publish.yml
