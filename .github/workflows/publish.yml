@@ -43,15 +43,15 @@ jobs:
         run: |
           COMMIT_ID=$(git rev-parse HEAD)
           echo $COMMIT_ID
-          CHANGE_FILES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_ID | grep -c 'packages/landosol-roster/package.json')
+          CHANGE_FILES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_ID)
           echo $CHANGE_FILES
-          # if [ 0 -eq $(git diff-tree --no-commit-id --name-only -r $COMMIT_ID | grep -c 'packages/landosol-roster/package.json') ]; then
-          #   echo "File changes not found."
-          #   echo "file_changed=false" >> $GITHUB_OUTPUT
-          # else
-          #   echo "File changes found."
-          #   echo "file_changed=true" >> $GITHUB_OUTPUT
-          # fi
+          if echo "$CHANGE_FILES" | grep -q 'packages/landosol-roster/package.json') ; then
+            echo "File changes found."
+            echo "file_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "File changes not found."
+            echo "file_changed=false" >> $GITHUB_OUTPUT
+          fi
 
       # - name: Get Datas
       #   if: steps.check-changes.outputs.file_changed
