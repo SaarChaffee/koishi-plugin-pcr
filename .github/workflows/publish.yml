@@ -45,7 +45,7 @@ jobs:
           echo $COMMIT_ID
           CHANGE_FILES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_ID)
           echo $CHANGE_FILES
-          if echo "$CHANGE_FILES" | grep -q 'packages/landosol-roster/package.json') ; then
+          if echo "$CHANGE_FILES" | grep -q 'packages/landosol-roster/package.json' ; then
             echo "File changes found."
             echo "file_changed=true" >> $GITHUB_OUTPUT
           else
