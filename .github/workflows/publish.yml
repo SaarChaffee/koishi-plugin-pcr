@@ -54,7 +54,7 @@ jobs:
           fi
 
       - name: Get Datas
-        if: steps.check-changes.outputs.file_changed
+        if: ${{ steps.check-changes.outputs.file_changed }}
         run: |
           npm pack koishi-plugin-pcr-landosol-roster
           tar -zxvf koishi-plugin-pcr-landosol-roster-*.tgz \
@@ -66,7 +66,7 @@ jobs:
           ls -alF packages/landosol-roster/data
 
       - name: Get Hash
-        if: steps.check-changes.outputs.file_changed
+        if: ${{ steps.check-changes.outputs.file_changed }}
         id: current-hash
         run: |
           echo "chara_name=$(sha256sum packages/landosol-roster/data/chara_name.json | awk '{print $1}')" >> $GITHUB_OUTPUT
@@ -74,18 +74,18 @@ jobs:
           echo "unavailable_chara=$(sha256sum packages/landosol-roster/data/unavailable_chara.json | awk '{print $1}')" >> $GITHUB_OUTPUT
 
       - name: Create Folder
-        if: steps.check-changes.outputs.file_changed
+        if: ${{ steps.check-changes.outputs.file_changed }}
         run: mkdir LandosolRoster
 
       - name: Get Landosol Roster Data
-        if: steps.check-changes.outputs.file_changed
+        if: ${{ steps.check-changes.outputs.file_changed }}
         uses: actions/checkout@v4
         with:
           repository: 'Ice9Coffee/LandosolRoster'
           path: 'LandosolRoster'
 
       - name: Get Landosol Roster Data Hash
-        if: steps.check-changes.outputs.file_changed
+        if: ${{ steps.check-changes.outputs.file_changed }}
         id: remote-hash
         run: |
           echo "chara_name=$(sha256sum LandosolRoster/chara_name.json | awk '{print $1}')" >> $GITHUB_OUTPUT
@@ -93,15 +93,15 @@ jobs:
           echo "unavailable_chara=$(sha256sum LandosolRoster/unavailable_chara.json | awk '{print $1}')" >> $GITHUB_OUTPUT
 
       - name: CAS Chara Name
-        if: steps.check-changes.outputs.file_changed && steps.current-hash.outputs.chara_name != steps.remote-hash.outputs.chara_name
+        if: ${{ steps.check-changes.outputs.file_changed && steps.current-hash.outputs.chara_name != steps.remote-hash.outputs.chara_name }}
         run: cp LandosolRoster/chara_name.json packages/landosol-roster/data/chara_name.json
 
       - name: CAS Chara Profile
-        if: steps.check-changes.outputs.file_changed && steps.current-hash.outputs.chara_profile != steps.remote-hash.outputs.chara_profile
+        if: ${{ steps.check-changes.outputs.file_changed && steps.current-hash.outputs.chara_profile != steps.remote-hash.outputs.chara_profile }}
         run: cp LandosolRoster/chara_profile.json packages/landosol-roster/data/chara_profile.json
 
       - name: CAS Unavailable Name
-        if: steps.check-changes.outputs.file_changed && steps.current-hash.outputs.unavailable_name != steps.remote-hash.outputs.unavailable_name
+        if: ${{ steps.check-changes.outputs.file_changed && steps.current-hash.outputs.unavailable_name != steps.remote-hash.outputs.unavailable_name }}
         run: cp LandosolRoster/unavailable_name.json packages/landosol-roster/data/unavailable_name.json
 
       - name: Build

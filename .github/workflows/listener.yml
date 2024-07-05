@@ -53,21 +53,21 @@ jobs:
             echo "IS_SYNC=false" >> $GITHUB_OUTPUT
           fi
 
-      # - name: Bump version
-      #   if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA && steps.lastest-commit-message.outputs.IS_SYNC
-      #   run: |
-      #     yarn bump -3 landosol-roster
+      - name: Bump version
+        if: ${{ steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA && steps.lastest-commit-message.outputs.IS_SYNC }}
+        run: |
+          yarn bump -3 landosol-roster
 
-      #     version=$(jq -r '.version' packages/landosol-roster/package.json | awk '{print $1}')
-      #     latest_commit_sha=${{steps.lastest-commit.outputs.LATEST_COMMIT_SHA}}
-      #     version="${version}+${commit_sha}"
-      #     echo "Bump version to $version."
+          version=$(jq -r '.version' packages/landosol-roster/package.json | awk '{print $1}')
+          latest_commit_sha=${{steps.lastest-commit.outputs.LATEST_COMMIT_SHA}}
+          version="${version}+${commit_sha}"
+          echo "Bump version to $version."
 
-      #     jq --arg version "$version" '.version = $version' packages/landosol-roster/package.json > package.json.tmp && mv package.json.tmp packages/landosol-roster/package.json
+          jq --arg version "$version" '.version = $version' packages/landosol-roster/package.json > package.json.tmp && mv package.json.tmp packages/landosol-roster/package.json
 
-      # - name: Commit and push
-      #   if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA && steps.lastest-commit-message.outputs.IS_SYNC
-      #   run: |
-      #     git add packages/landosol-roster/package.json
-      #     git commit -m "chore: auto bump version"
-      #     git push origin master
+      - name: Commit and push
+        if: ${{ steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA && steps.lastest-commit-message.outputs.IS_SYNC }}
+        run: |
+          git add packages/landosol-roster/package.json
+          git commit -m "chore: auto bump version"
+          git push origin master
