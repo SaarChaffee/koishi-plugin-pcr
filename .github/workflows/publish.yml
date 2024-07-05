@@ -11,9 +11,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: master
+        # with:
+        #   fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -43,6 +42,7 @@ jobs:
         id: check-changes
         run: |
           COMMIT_ID=$(git rev-parse HEAD)
+          git diff-tree --no-commit-id --name-only -r $COMMIT_ID
           if [ 0 -eq $(git diff-tree --no-commit-id --name-only -r $COMMIT_ID | grep -c 'packages/landosol-roster/package.json') ]; then
             echo "File changes not found."
             echo "file_changed=false" >> $GITHUB_OUTPUT
