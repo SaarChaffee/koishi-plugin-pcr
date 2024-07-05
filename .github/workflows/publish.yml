@@ -14,35 +14,37 @@ jobs:
         # with:
         #   fetch-depth: 0
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      # - name: Set up Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20
 
-      - name: Get Yarn Cache Directory Path
-        id: yarn-cache-dir-path
-        shell: bash
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+      # - name: Get Yarn Cache Directory Path
+      #   id: yarn-cache-dir-path
+      #   shell: bash
+      #   run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache Dependencies
-        id: cache-yarn
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      # - name: Cache Dependencies
+      #   id: cache-yarn
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-yarn-
 
-      - name: Install Dependencies
-        shell: bash
-        run: |
-          yarn
+      # - name: Install Dependencies
+      #   shell: bash
+      #   run: |
+      #     yarn
 
       - name: Check File Changes
         id: check-changes
         run: |
           COMMIT_ID=$(git rev-parse HEAD)
-          git diff-tree --no-commit-id --name-only -r $COMMIT_ID
+          echo $COMMIT_ID
+          CHANGE_FILES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_ID)
+          echo $CHANGE_FILES
           # if [ 0 -eq $(git diff-tree --no-commit-id --name-only -r $COMMIT_ID | grep -c 'packages/landosol-roster/package.json') ]; then
           #   echo "File changes not found."
           #   echo "file_changed=false" >> $GITHUB_OUTPUT
