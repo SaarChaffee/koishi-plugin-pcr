@@ -59,11 +59,14 @@ jobs:
           yarn bump -3 landosol-roster
 
           version=$(jq -r '.version' packages/landosol-roster/package.json | awk '{print $1}')
+          echo $version
           latest_commit_sha=${{steps.lastest-commit.outputs.LATEST_COMMIT_SHA}}
-          version="${version}+${commit_sha}"
+          version="${version}+${latest_commit_sha}"
           echo "Bump version to $version."
 
           jq --arg version "$version" '.version = $version' packages/landosol-roster/package.json > package.json.tmp && mv package.json.tmp packages/landosol-roster/package.json
+          version=$(jq -r '.version' packages/landosol-roster/package.json | awk '{print $1}')
+          echo $version
 
       - name: Commit and push
         if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA && steps.lastest-commit-message.outputs.IS_SYNC
