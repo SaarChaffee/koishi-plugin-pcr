@@ -43,7 +43,7 @@ jobs:
         run: |
           COMMIT_ID=$(git rev-parse HEAD)
           echo $COMMIT_ID
-          CHANGE_FILES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_ID)
+          CHANGE_FILES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_ID | grep -c 'packages/landosol-roster/package.json')
           echo $CHANGE_FILES
           # if [ 0 -eq $(git diff-tree --no-commit-id --name-only -r $COMMIT_ID | grep -c 'packages/landosol-roster/package.json') ]; then
           #   echo "File changes not found."
