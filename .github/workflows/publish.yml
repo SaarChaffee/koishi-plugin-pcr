@@ -54,7 +54,6 @@ jobs:
           fi
 
       - name: Get Datas
-        if: steps.check-changes.outputs.file_changed == 'true'
         run: |
           npm pack koishi-plugin-pcr-landosol-roster
           tar -zxvf koishi-plugin-pcr-landosol-roster-*.tgz \
