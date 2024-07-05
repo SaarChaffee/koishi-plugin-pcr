@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -43,9 +43,7 @@ jobs:
         id: check-changes
         run: |
           COMMIT_ID=$(git rev-parse HEAD)
-          FILE_CHANGES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_ID | grep -c 'packages/landosol-roster/package.json')
-          echo $FILE_CHANGES
-          if [ -z "$FILE_CHANGES" ]; then
+          if [ 0 -eq $(git diff-tree --no-commit-id --name-only -r $COMMIT_ID | grep -c 'packages/landosol-roster/package.json') ]; then
             echo "File changes not found."
             echo "file_changed=false" >> $GITHUB_OUTPUT
           else
