@@ -20,32 +20,16 @@ jobs:
         with:
           node-version: 20
 
-      - name: Check Yarn Version
-        id: yarn-version
-        shell: bash
-        run: |
-          VERSION=$(yarn --version)
-          echo $VERSION
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "is-berry=$(echo $VERSION | grep -v '^1\.' | wc -l)" >> $GITHUB_OUTPUT
-
-      - name: Get Yarn Cache Directory Path (Yarn 1)
-        if: steps.yarn-version.outputs.is-berry == '0'
+      - name: Get Yarn Cache Directory Path
         id: yarn-cache-dir-path
         shell: bash
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-      - name: Get Yarn Cache Directory Path (Yarn 2)
-        if: steps.yarn-version.outputs.is-berry == '1'
-        id: yarn-berry-cache-dir-path
-        shell: bash
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
       - name: Cache Dependencies
         id: cache-yarn
         uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir || steps.yarn-berry-cache-dir-path.outputs.dir }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
@@ -59,16 +43,15 @@ jobs:
         id: check-changes
         run: |
           COMMIT_ID=$(git rev-parse HEAD)
-          git diff-tree --no-commit-id --name-only -r $COMMIT_ID
-      #    FILE_CHANGES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_ID | grep "packages/landosol-roster/package.json")
-      #    echo $FILE_CHANGES
-      #    if [ -z "$FILE_CHANGES" ]; then
-      #      echo "File changes not found."
-      #      echo "file_changed=false" >> $GITHUB_OUTPUT
-      #    else
-      #      echo "File changes found."
-      #      echo "file_changed=true" >> $GITHUB_OUTPUT
-      #    fi
+          FILE_CHANGES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_ID | grep -c 'packages/landosol-roster/package.json')
+          echo $FILE_CHANGES
+          if [ -z "$FILE_CHANGES" ]; then
+            echo "File changes not found."
+            echo "file_changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "File changes found."
+            echo "file_changed=true" >> $GITHUB_OUTPUT
+          fi
 
       # - name: Get Datas
       #   if: steps.check-changes.outputs.file_changed
