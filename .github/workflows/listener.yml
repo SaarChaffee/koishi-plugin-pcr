@@ -79,4 +79,7 @@ jobs:
 
       - name: Run Publish
         if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA && steps.lastest-commit-message.outputs.IS_SYNC
-        uses: ./.github/workflows/publish.yml
+        # uses: ./.github/workflows/publish.yml
+        run: |
+          ls -alF .
+          ls -alF ./.githun/workflows
