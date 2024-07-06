@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-pcr",
   "description": "PCR plugin for Koishi",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -50,7 +50,7 @@
   },
   "peerDependencies": {
     "koishi": "^4.17.1",
-    "koishi-plugin-pcr-landosol-roster": "^0.0.2"
+    "koishi-plugin-pcr-landosol-roster": "^1.0.0"
   },
   "peerDependenciesMeta": {
     "koishi-plugin-pcr-landosol-roster": {
@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "koishi-plugin-canvas": "^0.2.2",
-    "koishi-plugin-pcr-landosol-roster": "^0.0.2"
+    "koishi-plugin-pcr-landosol-roster": "^1.0.0"
   },
   "dependencies": {
     "file-type": "^16.5.4"
