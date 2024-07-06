@@ -79,3 +79,5 @@ jobs:
 
   publish:
     uses: ./.github/workflows/publish.yml
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
