@@ -87,7 +87,7 @@ jobs:
         run: cp LandosolRoster/chara_profile.json packages/landosol-roster/data/chara_profile.json
 
       - name: CAS Unavailable Name
-        if: teps.current-hash.outputs.unavailable_name != steps.remote-hash.outputs.unavailable_name
+        if: steps.current-hash.outputs.unavailable_name != steps.remote-hash.outputs.unavailable_name
         run: cp LandosolRoster/unavailable_name.json packages/landosol-roster/data/unavailable_name.json
 
       - name: Build
