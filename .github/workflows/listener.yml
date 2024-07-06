@@ -55,7 +55,7 @@ jobs:
           fi
 
       - name: Bump version
-        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA == 'true' && steps.lastest-commit-message.outputs.IS_SYNC == 'true'
+        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA == 'true'
         run: |
           yarn bump -3 landosol-roster
 
@@ -70,7 +70,7 @@ jobs:
           echo $version
 
       - name: Commit and push
-        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA == 'true' && steps.lastest-commit-message.outputs.IS_SYNC == 'true'
+        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -80,12 +80,12 @@ jobs:
 
       - name: Set output
         id: updated
-        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA == 'true' && steps.lastest-commit-message.outputs.IS_SYNC == 'true'
+        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA == 'true'
         run: echo "updated=true" >> $GITHUB_OUTPUT
 
   publish:
     needs: check-commit
-    # if: needs.check-commit.outputs.updated == 'true'
+    if: needs.check-commit.outputs.updated == 'true'
     uses: ./.github/workflows/publish.yml
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
