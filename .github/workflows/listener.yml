@@ -85,7 +85,7 @@ jobs:
 
   publish:
     needs: check-commit
-    if: needs.check-commit.outputs.updated == 'true'
+    # if: needs.check-commit.outputs.updated == 'true'
     uses: ./.github/workflows/publish.yml
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
