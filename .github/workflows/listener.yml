@@ -10,6 +10,8 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.updated.outputs.updated }}
     steps:
       - name: Setup
         uses: cordiverse/workflows/.github/actions/setup@main
@@ -45,7 +47,6 @@ jobs:
         id: lastest-commit-message
         run: |
           latest_commit_message=$(git -C LandosolRoster log -1 --format=%s)
-          echo $latest_commit_message
           if [[ $latest_commit_message == "auto sync to json" ]]; then
             echo "LATEST_COMMIT_MESSAGE=$latest_commit_message" >> $GITHUB_OUTPUT
             echo "IS_SYNC=true" >> $GITHUB_OUTPUT
@@ -54,7 +55,7 @@ jobs:
           fi
 
       - name: Bump version
-        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA && steps.lastest-commit-message.outputs.IS_SYNC
+        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA == 'true' && steps.lastest-commit-message.outputs.IS_SYNC == 'true'
         run: |
           yarn bump -3 landosol-roster
 
@@ -69,7 +70,7 @@ jobs:
           echo $version
 
       - name: Commit and push
-        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA && steps.lastest-commit-message.outputs.IS_SYNC
+        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA == 'true' && steps.lastest-commit-message.outputs.IS_SYNC == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -77,7 +78,14 @@ jobs:
           git commit -m "chore: auto bump version"
           git push origin master
 
+      - name: Set output
+        id: updated
+        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA == 'true' && steps.lastest-commit-message.outputs.IS_SYNC == 'true'
+        run: echo "updated=true" >> $GITHUB_OUTPUT
+
   publish:
+    needs: check-commit
+    if: needs.check-commit.outputs.updated == 'true'
     uses: ./.github/workflows/publish.yml
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
