@@ -5340,6 +5340,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"koishi-plugin-cherugo@workspace:packages/cherugo":
+  version: 0.0.0-use.local
+  resolution: "koishi-plugin-cherugo@workspace:packages/cherugo"
+  dependencies:
+    koishi: "npm:^4.17.1"
+  peerDependencies:
+    koishi: ^4.17.1
+  languageName: unknown
+  linkType: soft
+
 "koishi-plugin-pcr-arena@workspace:packages/arena":
   version: 0.0.0-use.local
   resolution: "koishi-plugin-pcr-arena@workspace:packages/arena"

@@ -1,0 +1,48 @@
+{
+  "name": "koishi-plugin-cherugo",
+  "description": "Language Cheru Translator",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "author": "SaarChaffee <saarchaffee@qq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaarChaffee/koishi-plugin-pcr.git",
+    "directory": "packages/cherugo"
+  },
+  "bugs": {
+    "url": "https://github.com/SaarChaffee/koishi-plugin-pcr/issues"
+  },
+  "homepage": "https://github.com/SaarChaffee/koishi-plugin-pcr",
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "service",
+    "plugin",
+    "pcr",
+    "公主连结",
+    "公主连结Re:Dive",
+    "公主連結R",
+    "超異域公主連結☆Re:Dive",
+    "プリコネR",
+    "プリンセスコネクト！Re:Dive",
+    "切噜",
+    "cherugo",
+    "ちぇる"
+  ],
+  "koishi": {
+    "description": {
+      "zh": "切噜～♪切啰巴切拉切蹦切蹦"
+    }
+  },
+  "peerDependencies": {
+    "koishi": "^4.17.1"
+  },
+  "devDependencies": {
+    "koishi": "^4.17.1"
+  }
+}

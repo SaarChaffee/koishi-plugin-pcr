@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "koishi-plugin-pcr": ["packages/pcr/src"],
+      "koishi-plugin-cherugo": ["packages/cherugo/src"],
       "koishi-plugin-pcr-*": ["packages/*/src"]
     }
   }
