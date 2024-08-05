@@ -1,8 +1,6 @@
-<p align="center">
-
-![header](https://github.com/saarchaffee/koishi-plugin-pcr/blob/master/packages/cherugo/assets/St.cheru～♪.webp)
-
-</p>
+<div align="center">
+  <img src="https://github.com/saarchaffee/koishi-plugin-pcr/blob/master/packages/cherugo/assets/St.cheru～♪.webp">
+</div>
 
 <h1 align="center">切噜～♪</h1>
 
