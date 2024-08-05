@@ -1,6 +1,8 @@
-import { Context } from 'koishi'
+import { Context, Schema } from 'koishi'
 
 export const name = 'cherugo'
+
+export const Config: Schema<unknown> = Schema.object({})
 
 export function apply(ctx: Context) {
   const CHERU_SET = '切卟叮咧哔唎啪啰啵嘭噜噼巴拉蹦铃'
