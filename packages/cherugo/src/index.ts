@@ -68,12 +68,14 @@ export function apply(ctx: Context) {
 
   ctx
     .command('cherugo <text:text>', '切噜一下，转换为切噜语')
+    .alias('切噜一下')
     .action((_, text) => {
-      return str2cheru(text)
+      return '切噜～♪' + str2cheru(text)
     })
 
   ctx
     .command('cheru～♪ <text:text>', '切噜～♪切啰巴切拉切蹦切蹦，切噜语翻译')
+    .alias('切噜～♪')
     .action((_, text) => {
       return cheru2str(text)
     })
