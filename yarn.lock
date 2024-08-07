@@ -1040,6 +1040,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@koishijs/plugin-help@npm:^2.4.4":
+  version: 2.4.4
+  resolution: "@koishijs/plugin-help@npm:2.4.4"
+  peerDependencies:
+    koishi: ^4.17.9
+  checksum: 10c0/ab2dbbbc53c217949c24c8da967a5fbff7b934ca76745e972825d83a8d43b0e39172b47ad85731b41fa02f46fc24aff414ecc8d28ef4213cbf2b3aaa8d3d91f1
+  languageName: node
+  linkType: hard
+
 "@koishijs/plugin-http@npm:^0.5.3":
   version: 0.5.3
   resolution: "@koishijs/plugin-http@npm:0.5.3"
@@ -5354,6 +5363,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "koishi-plugin-pcr-arena@workspace:packages/arena"
   dependencies:
+    "@koishijs/plugin-help": "npm:^2.4.4"
     koishi-plugin-canvas: "npm:^0.2.2"
   peerDependencies:
     koishi: ^4.17.1

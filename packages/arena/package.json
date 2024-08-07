@@ -57,6 +57,7 @@
     "koishi": "^4.17.1"
   },
   "devDependencies": {
+    "@koishijs/plugin-help": "^2.4.4",
     "koishi-plugin-canvas": "^0.2.2"
   }
 }

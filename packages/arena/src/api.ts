@@ -33,6 +33,9 @@ export class Arena extends Service {
       this.alias_jp.push(`日${a}`)
     })
     this.aliases = this.alias.concat(this.alias_bcr, this.alias_tw, this.alias_jp)
+    this.alias_bcr.push('cn')
+    this.alias_tw.push('tw')
+    this.alias_jp.push('jp')
   }
 
   protected async start() {
