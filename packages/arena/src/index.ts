@@ -92,7 +92,7 @@ export function apply(ctx: Context, config: Config) {
           return `无法解析「${defId[1]}」`
         }
         if (defId.length < 5) {
-          return `少于5名角色的检索条件请移步 pcrdfans b进行查询`
+          return `少于5名角色的检索条件请移步 pcrdfans 进行查询`
         }
         if (defId.length > 5) {
           return `编队不能多于5名角色`
