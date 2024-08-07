@@ -87,7 +87,7 @@ export function apply(ctx: Context, config: Config) {
         if (ctx.pcr.isReloading()) {
           return `兰德索尔花名册正在重新加载中，请稍后尝试`
         }
-        const defId = ctx.pcr.parseTeam(def)
+        const defId = ctx.pcr.parseTeam(def, true)
         if (!defId[0]) {
           return `无法解析「${defId[1]}」`
         }
