@@ -45,7 +45,7 @@ jobs:
           fi
           if [[ -z "$sha" ]]; then
             # 获取第一个提交的 SHA
-            first_commit_sha=$(git -C LandosolRoster rev-list --max-parents=0 HEAD)
+            first_commit_sha=$(git -C LandosolRoster rev-list --max-parents=0 --format=%h HEAD)
             sha=$first_commit_sha
             echo "CURRENT_COMMIT_SHA=$sha" >> $GITHUB_OUTPUT
           fi
@@ -53,7 +53,7 @@ jobs:
       - name: Get latest commit message
         id: lastest-commit-message
         run: |
-          latest_commit_message=$(git log --pretty=format:"%s" ${{steps.lastest-commit.outputs.CURRENT_COMMIT_SHA}}..${{steps.lastest-commit.outputs.LATEST_COMMIT_SHA}} | grep -c 'auto sync to json')
+          latest_commit_message=$(git -C LandosolRoster log --pretty=format:"%s" ${{steps.lastest-commit.outputs.CURRENT_COMMIT_SHA}}..${{steps.lastest-commit.outputs.LATEST_COMMIT_SHA}} | grep -c 'auto sync to json')
           if [[ "$latest_commit_message" -ne 0 ]]; then
             echo "IS_SYNC=true" >> $GITHUB_OUTPUT
           else
