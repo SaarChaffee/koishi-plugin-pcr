@@ -45,7 +45,7 @@ jobs:
           fi
           if [[ -z "$sha" ]]; then
             # 获取第一个提交的 SHA
-            first_commit_sha=$(git -C LandosolRoster rev-list --max-parents=0 --format=%h HEAD)
+            first_commit_sha=$(git -C LandosolRoster rev-list --max-parents=0 HEAD | cut -c1-7)
             sha=$first_commit_sha
             echo "CURRENT_COMMIT_SHA=$sha" >> $GITHUB_OUTPUT
           fi
