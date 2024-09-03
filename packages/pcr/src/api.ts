@@ -2,8 +2,8 @@ import { existsSync } from 'fs'
 import { mkdir, readFile, writeFile } from 'fs/promises'
 import { dirname, join } from 'path'
 
-import type { } from 'koishi-plugin-pcr-landosol-roster'
-import type { } from 'koishi-plugin-canvas'
+import type {} from 'koishi-plugin-pcr-landosol-roster'
+import type {} from 'koishi-plugin-canvas'
 import { Image } from '@koishijs/canvas'
 import { fromBuffer } from 'file-type'
 import { Context, Service, sanitize } from 'koishi'
@@ -71,9 +71,24 @@ export class PCR extends Service {
       if (!existsSync(path)) {
         await mkdir(path, { recursive: true })
       }
-      const file = await this.ctx.http.file(url)
-      this.ctx.logger.debug(file.filename)
-      this.ctx.logger.info(`正在下载资源: ${fullPath}`)
+      let file = null
+      let retry = 0
+      while (true) {
+        try {
+          file = await this.ctx.http.file(url)
+          this.ctx.logger.debug(file.filename)
+          this.ctx.logger.info(`正在下载资源: ${fullPath}`)
+          if (file.data.byteLength) {
+            break
+          }
+        } catch (e) {
+          this.ctx.logger.error(e)
+          if (retry++ > 5) {
+            this.ctx.logger.error(`下载资源失败: ${fullPath}`)
+            return { buffer, type: null }
+          }
+        }
+      }
       buffer = Buffer.from(file.data)
       await writeFile(fullPath, buffer)
     }

@@ -133,7 +133,7 @@ export function apply(ctx: Context, config: Config) {
         const numberHeight = 46
         const numberWidth = 35
         const smallIconSize = 20
-        const n = result.length >= 6 ? 6 : result.length
+        const n = result.length >= 10 ? 10 : result.length
         const borderPix = 5
         const width = 5 * iconSize + radius * 2 +
           (Math.max(...result.map(r => Math.max(r.up, r.down))).toString().length + 1) * numberWidth
@@ -163,6 +163,15 @@ export function apply(ctx: Context, config: Config) {
               x = iconSize * j + radius
               y = (iconSize + borderPix) * i + radius
               const image = await ctx.pcr.getUnitIcon(atk.id.toString().slice(0, -2), star, true)
+              if (!image.buffer && !image.type) {
+                cv.font = `bolder ${fontSize}px sans-serif`
+                cv.textAlign = 'left'
+                cv.textBaseline = 'top'
+                cv.fillStyle = fontPink
+                const text = `获取角色图标失败，请重试`
+                cv.fillText(text, (width - 382) / 2, (height - 30) / 2)
+                return
+              }
               cv.drawImage(
                 image.buffer as Image,
                 x,
