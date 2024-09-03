@@ -53,9 +53,15 @@ jobs:
       - name: Get latest commit message
         id: lastest-commit-message
         run: |
-          latest_commit_message=$(git -C LandosolRoster log --pretty=format:"%s" ${{steps.lastest-commit.outputs.CURRENT_COMMIT_SHA}}..${{steps.lastest-commit.outputs.LATEST_COMMIT_SHA}} | grep -c 'auto sync to json')
-          if [[ "$latest_commit_message" -ne 0 ]]; then
-            echo "IS_SYNC=true" >> $GITHUB_OUTPUT
+          current_sha=${{steps.lastest-commit.outputs.CURRENT_COMMIT_SHA}}
+          latest_sha=${{steps.lastest-commit.outputs.LATEST_COMMIT_SHA}}
+          if [[ "$current_sha" != "$latest_sha" ]]; then
+            latest_commit_message=$(git -C LandosolRoster log --pretty=format:"%s" $current_sha..$latest_sha | grep -c 'auto sync to json')
+            if [[ "$latest_commit_message" -ne 0 ]]; then
+              echo "IS_SYNC=true" >> $GITHUB_OUTPUT
+            else
+              echo "IS_SYNC=false" >> $GITHUB_OUTPUT
+            fi
           else
             echo "IS_SYNC=false" >> $GITHUB_OUTPUT
           fi
