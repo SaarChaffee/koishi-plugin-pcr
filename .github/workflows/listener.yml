@@ -21,6 +21,7 @@ jobs:
         with:
           repository: Ice9Coffee/LandosolRoster
           path: LandosolRoster
+          fetch-depth: 0
 
       - name: Get latest commit SHA
         id: lastest-commit
