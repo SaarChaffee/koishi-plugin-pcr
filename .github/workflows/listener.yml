@@ -27,7 +27,7 @@ jobs:
         run: |
           latest_commit_sha=$(git -C LandosolRoster log -1 --format=%h)
           version=$(jq -r '.version' packages/landosol-roster/package.json | awk '{print $1}')
-          if [[ $latest_commit_sha == *"+"* ]]; then
+          if [[ $version == *"+"* ]]; then
             sha=${version#*+}
             echo $sha
             echo "CURRENT_COMMIT_SHA=$sha" >> $GITHUB_OUTPUT
