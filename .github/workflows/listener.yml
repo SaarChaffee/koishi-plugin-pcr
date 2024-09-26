@@ -53,6 +53,7 @@ jobs:
 
       - name: Get latest commit message
         id: lastest-commit-message
+        if: steps.lastest-commit.outputs.IS_NEW_COMMIT_SHA == 'true'
         run: |
           current_sha=${{steps.lastest-commit.outputs.CURRENT_COMMIT_SHA}}
           latest_sha=${{steps.lastest-commit.outputs.LATEST_COMMIT_SHA}}
