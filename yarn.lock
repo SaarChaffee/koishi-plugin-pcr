@@ -6294,6 +6294,8 @@ __metadata:
   dependencies:
     "@koishijs/plugin-help": "npm:^2.4.5"
     koishi-plugin-canvas: "npm:^0.2.2"
+    undici: "npm:^7.8.0"
+    undici-types: "npm:^7.8.0"
   peerDependencies:
     koishi: ^4.18.7
   languageName: unknown
@@ -8834,6 +8836,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici-types@npm:^7.8.0":
+  version: 7.8.0
+  resolution: "undici-types@npm:7.8.0"
+  checksum: 10c0/9d9d246d1dc32f318d46116efe3cfca5a72d4f16828febc1918d94e58f6ffcf39c158aa28bf5b4fc52f410446bc7858f35151367bd7a49f21746cab6497b709b
+  languageName: node
+  linkType: hard
+
 "undici-types@npm:~5.26.4":
   version: 5.26.5
   resolution: "undici-types@npm:5.26.5"
@@ -8852,6 +8861,13 @@ __metadata:
   version: 6.19.2
   resolution: "undici@npm:6.19.2"
   checksum: 10c0/3b7b9238c0c84fd90742422fb12844a29e33e922d2c5f722f626090ca1f1ec93596ccec9be1814bb0e923e28682d2080a17d17a4afe373897b9770ef25a64d97
+  languageName: node
+  linkType: hard
+
+"undici@npm:^7.8.0":
+  version: 7.8.0
+  resolution: "undici@npm:7.8.0"
+  checksum: 10c0/7141f63ea405208a88120d211d83d77bf21327b16b451d3149fb266c28884fbcf78ec370ac2d3412a0e68ba6132ab85265ba85a2f4fde24cb47dc77f5c5a158c
   languageName: node
   linkType: hard
 

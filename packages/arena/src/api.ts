@@ -4,6 +4,7 @@ import path from 'path'
 
 import { Image } from '@koishijs/canvas'
 import { Context, Service } from 'koishi'
+import { Client, Headers } from 'undici'
 
 import { Config } from './config'
 import { PcrdfansResponse } from './types'
@@ -23,7 +24,9 @@ export class Arena extends Service {
   public NUMBER_YELLOW: Image[] = []
   public NUMBER_BLUE: Image[] = []
   declare config: Config
-
+  private client: Client
+  private API = 'https://api.pcrdfans.com'
+  private PATH = '/x/v1/search'
   constructor(ctx: Context, config: Config) {
     super(ctx, 'arena', true)
     this.config = config
@@ -36,6 +39,12 @@ export class Arena extends Service {
     this.alias_bcr.push('cn')
     this.alias_tw.push('tw')
     this.alias_jp.push('jp')
+    this.client = new Client(this.API, {
+      connect: {
+        family: this.config.IPv4 ? 4 : undefined,
+        timeout: 10000,
+      },
+    })
   }
 
   protected async start() {
@@ -56,12 +65,6 @@ export class Arena extends Service {
   }
 
   async request(defenders: number[], region: number = 1): Promise<PcrdfansResponse> {
-    const api = 'https://api.pcrdfans.com/x/v1/search'
-    const headers = {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Authorization': this.config.API_KEY,
-    }
-    this.ctx.logger.debug(headers)
     const data = {
       _sign: 'a',
       def: defenders,
@@ -71,13 +74,18 @@ export class Arena extends Service {
       ts: Math.floor(Date.now() / 1000),
       region,
     }
-    this.ctx.logger.debug(data)
-    const res = await this.ctx.http.post<PcrdfansResponse>(api, data, { headers, timeout: 10000 }).catch((e) => {
-      this.ctx.logger.error(e)
-      return e
+    const headers = new Headers({
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Authorization': this.config.API_KEY,
     })
-    this.ctx.logger.debug(res)
-    return res
+    this.ctx.logger.debug(data)
+    const resp = await this.client.request<PcrdfansResponse>({
+      path: this.PATH,
+      method: 'POST',
+      headers,
+      body: JSON.stringify(data),
+    })
+    return await resp.body.json() as PcrdfansResponse
   }
 
   prefix(msg: string): string | null {

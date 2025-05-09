@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-pcr-arena",
   "description": "PCR jjc/pjjc plugin",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -58,6 +58,10 @@
   },
   "devDependencies": {
     "@koishijs/plugin-help": "^2.4.5",
-    "koishi-plugin-canvas": "^0.2.2"
+    "koishi-plugin-canvas": "^0.2.2",
+    "undici-types": "^7.8.0"
+  },
+  "dependencies": {
+    "undici": "^7.8.0"
   }
 }
