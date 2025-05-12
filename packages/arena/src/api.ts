@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+import { lookup, resolve4 } from 'dns'
 import { readFile } from 'fs/promises'
 import path from 'path'
 
@@ -39,12 +40,29 @@ export class Arena extends Service {
     this.alias_bcr.push('cn')
     this.alias_tw.push('tw')
     this.alias_jp.push('jp')
-    this.client = new Client(this.API, {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const clientOptions: any = {
       connect: {
-        family: this.config.IPv4 ? 4 : undefined,
         timeout: 10000,
       },
-    })
+    }
+
+    if (this.config.IPv4) {
+      clientOptions.connect.family = 4
+      clientOptions.connect.lookup = (hostname, options, callback) => {
+        try {
+          resolve4(hostname, (err, addresses) => {
+            if (err || !addresses || !addresses.length) {
+              return callback(err || new Error('No IPv4 address found'), null, 4)
+            }
+            callback(null, addresses[0], 4)
+          })
+        } catch (error) {
+          lookup(hostname, { family: 4, all: false }, callback)
+        }
+      }
+    }
+    this.client = new Client(this.API, clientOptions)
   }
 
   protected async start() {
