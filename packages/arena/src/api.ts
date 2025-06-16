@@ -26,11 +26,13 @@ export class Arena extends Service {
   public NUMBER_BLUE: Image[] = []
   declare config: Config
   private client: Client
-  private API = 'https://api.pcrdfans.com'
+  private API: string
   private PATH = '/x/v1/search'
   constructor(ctx: Context, config: Config) {
     super(ctx, 'arena', true)
     this.config = config
+    this.API = typeof this.config.API === 'string' ? this.config.API : this.config.API.endpoint.trim()
+
     this.alias.forEach(a => {
       this.alias_bcr.push(`b${a}`)
       this.alias_tw.push(`台${a}`)
