@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-pcr-landosol-roster",
   "description": "PCR 兰德索尔花名册",
-  "version": "1.0.36+ad86696",
+  "version": "1.0.37+76722b9",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
