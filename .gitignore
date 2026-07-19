@@ -24,10 +24,10 @@ package-lock.json
 pnpm-lock.yaml
 
 .yarn/*
-!.yarn/patches
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
+# !.yarn/patches
+# !.yarn/releases
+# !.yarn/plugins
+# !.yarn/sdks
+# !.yarn/versions
 
 /data

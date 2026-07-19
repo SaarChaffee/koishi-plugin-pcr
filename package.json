@@ -58,5 +58,6 @@
     "yakumo-upgrade": "^0.3.6",
     "yakumo-version": "^0.3.4",
     "yml-register": "^1.2.5"
-  }
+  },
+  "packageManager": "yarn@4.8.1"
 }

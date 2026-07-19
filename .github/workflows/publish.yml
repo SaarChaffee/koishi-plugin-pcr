@@ -2,10 +2,10 @@ name: Publish
 
 on:
   workflow_call:
-    secrets:
-      NPM_TOKEN:
-        required: true
-        description: 'NPM token'
+    # secrets:
+    #   NPM_TOKEN:
+    #     required: true
+    #     description: 'NPM token'
   push:
     branches:
       - master
@@ -26,21 +26,37 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
 
+      - name: Enable Corepack
+        run: corepack enable
+
       # - name: Upgrade npm
       #   run: |
       #     npm install -g npm@latest
       #     npm --version
-
-      - name: Get Yarn Cache Directory Path
+      - name: Check Yarn Version
+        id: yarn-version
+        shell: bash
+        run: |
+          VERSION=$(yarn --version)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "is-berry=$(echo $VERSION | grep -v '^1\.' | wc -l)" >> $GITHUB_OUTPUT
+      - name: Get Yarn Cache Directory Path (Yarn 1)
+        if: steps.yarn-version.outputs.is-berry == '0'
         id: yarn-cache-dir-path
         shell: bash
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - name: Get Yarn Cache Directory Path (Yarn 2)
+        if: steps.yarn-version.outputs.is-berry == '1'
+        id: yarn-berry-cache-dir-path
+        shell: bash
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
       - name: Cache Dependencies
         id: cache-yarn
         uses: actions/cache@v6
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir || steps.yarn-berry-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
