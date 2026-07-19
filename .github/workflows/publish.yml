@@ -26,10 +26,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
 
-      - name: Upgrade npm
-        run: |
-          npm install -g npm@latest
-          npm --version
+      # - name: Upgrade npm
+      #   run: |
+      #     npm install -g npm@latest
+      #     npm --version
 
       - name: Get Yarn Cache Directory Path
         id: yarn-cache-dir-path
@@ -106,8 +106,8 @@ jobs:
       #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
       - name: Publish
-        run: npm publish --workspaces --provenance --access public --loglevel verbose
-        # run: yarn pub --debug
+        # run: npm publish --workspaces --workspace-update --provenance --access public --loglevel verbose
+        run: yarn pub --debug
 
       - name: Create Result Markdown
         if: ${{ success() || failure() }}
