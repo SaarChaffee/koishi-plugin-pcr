@@ -124,6 +124,9 @@ jobs:
       - name: Publish
         # run: npm publish --workspaces --workspace-update --provenance --access public --loglevel verbose
         run: yarn pub --debug
+        env:
+          NPM_CONFIG_PROVENANCE: true
+          YARN_NPM_PUBLISH_PROVENANCE: 1
 
       - name: Create Result Markdown
         if: ${{ success() || failure() }}
