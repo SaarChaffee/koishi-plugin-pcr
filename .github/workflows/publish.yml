@@ -26,6 +26,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
 
+      - name: Upgrade npm
+        run: |
+          npm install -g npm@latest
+          npm --version
+
       - name: Get Yarn Cache Directory Path
         id: yarn-cache-dir-path
         shell: bash
