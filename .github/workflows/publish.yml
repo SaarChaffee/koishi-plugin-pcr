@@ -29,10 +29,10 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Upgrade npm
-        run: |
-          npm install -g npm@latest
-          npm --version
+      # - name: Upgrade npm
+      #   run: |
+      #     npm install -g npm@latest
+      #     npm --version
       - name: Check Yarn Version
         id: yarn-version
         shell: bash
@@ -121,9 +121,16 @@ jobs:
       #   run: |
       #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
+      - name: Set Publish Config
+        run: |
+          yarn config set npmPublishProvenance true
+          yarn config set npmRegistryServer https://registry.npmjs.org/
+
+
       - name: Publish
-        run: npm publish --workspaces --workspace-update --provenance --access public --loglevel verbose
-        # run: yarn pub --debug
+        # run: npm publish --workspaces --workspace-update --provenance --access public --loglevel verbose
+        run:
+          yarn pub --debug
         # env:
         #   NPM_CONFIG_PROVENANCE: true
         #   YARN_NPM_PUBLISH_PROVENANCE: 1
