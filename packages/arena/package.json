@@ -19,6 +19,10 @@
   "bugs": {
     "url": "https://github.com/SaarChaffee/koishi-plugin-pcr/issues"
   },
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
   "homepage": "https://github.com/SaarChaffee/koishi-plugin-pcr",
   "keywords": [
     "chatbot",

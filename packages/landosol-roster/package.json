@@ -16,6 +16,10 @@
     "url": "git+https://github.com/SaarChaffee/koishi-plugin-pcr.git",
     "directory": "packages/landosol-roster"
   },
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
   "bugs": {
     "url": "https://github.com/SaarChaffee/koishi-plugin-pcr/issues"
   },

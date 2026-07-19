@@ -13,17 +13,18 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ref: master
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+        uses: actions/setup-node@v6
 
       - name: Get Yarn Cache Directory Path
         id: yarn-cache-dir-path
@@ -32,7 +33,7 @@ jobs:
 
       - name: Cache Dependencies
         id: cache-yarn
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
@@ -66,7 +67,7 @@ jobs:
         run: mkdir LandosolRoster
 
       - name: Get Landosol Roster Data
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: 'Ice9Coffee/LandosolRoster'
           path: 'LandosolRoster'
@@ -95,9 +96,9 @@ jobs:
           (yarn build 2>&1) | tee build.log
           exit ${PIPESTATUS[0]}
 
-      - name: Set NPM Token
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      # - name: Set NPM Token
+      #   run: |
+      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
       - name: Publish
         run: yarn pub --debug

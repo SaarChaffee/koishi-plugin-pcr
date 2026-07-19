@@ -1,15 +1,15 @@
-require:
-  - esbuild-register
-  - yakumo-esbuild
-  - yakumo-esbuild-yaml
-  - yakumo-mocha
-  - yakumo-publish
-  - yakumo-publish-sync
-  - yakumo-tsc
-  - yakumo-upgrade
-  - yakumo-version
-
-pipeline:
-  build:
-    - tsc
-    - esbuild
+- name: yakumo
+  config:
+    pipeline:
+      build:
+        - tsc
+        - esbuild
+- name: yakumo-esbuild
+- name: yakumo-esbuild-yaml
+- name: yakumo-mocha
+- name: yakumo-tsc
+- name: yakumo-publish-sync
+- name: yakumo/publish
+- name: yakumo/prepare
+- name: yakumo/upgrade
+- name: yakumo/version
