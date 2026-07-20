@@ -29,10 +29,6 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      # - name: Upgrade npm
-      #   run: |
-      #     npm install -g npm@latest
-      #     npm --version
       - name: Check Yarn Version
         id: yarn-version
         shell: bash
@@ -64,7 +60,7 @@ jobs:
       - name: Install Dependencies
         shell: bash
         run: |
-          yarn --no-immutable
+          yarn
 
       - name: Get Datas
         run: |

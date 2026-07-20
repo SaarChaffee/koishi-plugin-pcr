@@ -13,11 +13,37 @@ jobs:
     outputs:
       updated: ${{ steps.updated.outputs.updated }}
     steps:
-      - name: Setup
-        uses: cordiverse/workflows/.github/actions/setup@main
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+
+      - name: Enable Corepack
+        shell: bash
+        run: corepack enable
+
+      - name: Get Yarn Cache Directory Path (Yarn 2)
+        id: yarn-berry-cache-dir-path
+        shell: bash
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - name: Cache Dependencies
+        id: cache-yarn
+        uses: actions/cache@v6
+        with:
+          path: ${{ steps.yarn-berry-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install Dependencies
+        shell: bash
+        run: |
+          yarn
 
       - name: Checkout Landosol Roster
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: Ice9Coffee/LandosolRoster
           path: LandosolRoster
