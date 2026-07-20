@@ -127,7 +127,15 @@ jobs:
   publish:
     needs: check-commit
     if: needs.check-commit.outputs.updated == 'true'
-    uses: ./.github/workflows/publish.yml
-    permissions:
-      id-token: write
-      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Publish Workflow via API
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'publish.yml',
+              ref: 'master'
+            })

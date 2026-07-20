@@ -1,11 +1,7 @@
 name: Publish
 
 on:
-  workflow_call:
-    # secrets:
-    #   NPM_TOKEN:
-    #     required: true
-    #     description: 'NPM token'
+  workflow_dispatch:
   push:
     branches:
       - master
