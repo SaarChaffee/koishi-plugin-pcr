@@ -114,7 +114,7 @@ jobs:
 
       - name: Build
         run: |
-          (yarn build 2>&1) | tee build.log
+          (yarn build --no-immutable 2>&1) | tee build.log
           exit ${PIPESTATUS[0]}
 
       # - name: Set NPM Token
