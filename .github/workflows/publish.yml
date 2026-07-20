@@ -60,7 +60,7 @@ jobs:
       - name: Install Dependencies
         shell: bash
         run: |
-          yarn
+          yarn --no-immutable
 
       - name: Get Datas
         run: |
