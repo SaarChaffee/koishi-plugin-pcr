@@ -102,5 +102,6 @@ jobs:
     needs: check-commit
     if: needs.check-commit.outputs.updated == 'true'
     uses: ./.github/workflows/publish.yml
-    # secrets:
-    #   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    permissions:
+      id-token: write
+      contents: read
