@@ -128,6 +128,8 @@ jobs:
     needs: check-commit
     if: needs.check-commit.outputs.updated == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - name: Trigger Publish Workflow via API
         uses: actions/github-script@v7
